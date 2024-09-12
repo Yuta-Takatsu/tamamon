@@ -1,15 +1,13 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
-using TMPro;
 using Cysharp.Threading.Tasks;
 
-/// <summary>
-/// バトル用行動コマンドUIウィンドウ
-/// </summary>
-public class BattleUICommandTextWindow : CommandWindowBase
+public class TamamonSelectTextWindow : CommandWindowBase
 {
+    /// <summary>
+    /// コマンド選択
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask<int> SelectCommand()
     {
         await UniTask.WaitUntil(() => Input.anyKeyDown);
@@ -24,28 +22,14 @@ public class BattleUICommandTextWindow : CommandWindowBase
             {
                 return CloseIndex;
             }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                if (m_selectIndex == 0 || m_selectIndex == 2) break;
-
-                ShowArrowUI(m_selectIndex - 1);
-                break;
-            }
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                if (m_selectIndex == 1 || m_selectIndex == 3) break;
-
-                ShowArrowUI(m_selectIndex + 1);
-                break;
-            }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                ShowArrowUI(m_selectIndex - 2);
+                ShowArrowUI(m_selectIndex - 1);
                 break;
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                ShowArrowUI(m_selectIndex + 2);
+                ShowArrowUI(m_selectIndex + 1);
                 break;
             }
         }

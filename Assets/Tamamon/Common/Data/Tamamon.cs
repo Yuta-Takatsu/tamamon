@@ -115,7 +115,7 @@ public class Tamamon : MonoBehaviour
 
         if (isPlayer)
         {
-            m_tamamonImage.transform.DOScale(new Vector3(1, 1, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
+            m_tamamonImage.transform.DOScale(new Vector3(-1, 1, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
         }
         else
         {

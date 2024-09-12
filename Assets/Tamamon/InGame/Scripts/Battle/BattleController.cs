@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using UniRx;
 
 /// <summary>
 /// バトルコントローラークラス
@@ -18,6 +17,9 @@ public class BattleController : MonoBehaviour
     [SerializeField]
     private BattleTextWindowView m_battleTextWindowView = default;
 
+    [SerializeField]
+    private TamamonSelectController m_tamamonSelectController = default;
+
     private BattleModel m_battleModel = default;
 
     private Tamamon.TamamonDataInfo m_enemyTamamon = new Tamamon.TamamonDataInfo();
@@ -31,7 +33,7 @@ public class BattleController : MonoBehaviour
     private string m_waitMessage = "{0} はどうする？";
 
     private List<string> m_actionCommandList = new List<string>() { "戦う", "バッグ", "タマモン", "逃げる" };
-    private List<string> m_TechiqueCommandList = new List<string>() { "命がけ", "自爆", "大爆発", "ミストバースト" };
+    private List<string> m_TechiqueCommandList = new List<string>() { "シャドーボール", "パワージェム", "大地の力" };
 
     public void Start()
     {
@@ -130,10 +132,25 @@ public class BattleController : MonoBehaviour
 
         m_battleTextWindowView.BattleUIActionTextWindow.OnInitialize(m_actionCommandList);
 
-        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+        int index = await OnInput(m_battleTextWindowView.BattleUIActionTextWindow);
 
-        // 技選択ステートに変更
-        m_battleModel.BattleState = BattleModel.BattleStateType.TechniqueSelect;
+        // ステートを変更
+        if (index == 0)
+        {
+            m_battleModel.BattleState = BattleModel.BattleStateType.TechniqueSelect;
+        }
+        else if (index == 1)
+        {
+            m_battleModel.BattleState = BattleModel.BattleStateType.ItemSelect;
+        }
+        else if (index == 2)
+        {
+            m_battleModel.BattleState = BattleModel.BattleStateType.TamamonSelect;
+        }
+        else if (index == 3)
+        {
+            m_battleModel.BattleState = BattleModel.BattleStateType.Result;
+        }
     }
 
     /// <summary>
@@ -151,10 +168,17 @@ public class BattleController : MonoBehaviour
         m_battleTextWindowView.BattleUITechniqueTextWindow.OnInitialize(m_TechiqueCommandList);
         m_battleTextWindowView.BattleUITechniqueInfoTextWindow.ShowText(35, 2, "ノーマル");
 
-        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+        int index = await OnInput(m_battleTextWindowView.BattleUITechniqueTextWindow, true);
 
-        // 戦闘ステートに変更
-        m_battleModel.BattleState = BattleModel.BattleStateType.Execute;
+        // ステートを変更
+        if (index == 100)
+        {
+            m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
+        }
+        else
+        {
+            m_battleModel.BattleState = BattleModel.BattleStateType.Execute;
+        }
     }
 
     /// <summary>
@@ -208,7 +232,17 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnTamamonSelect()
     {
-        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+        m_tamamonSelectController.OnInitialize();
+
+        await m_tamamonSelectController.Show();
+
+        await m_tamamonSelectController.OnExecute();
+
+        await UniTask.WaitUntil(() => m_tamamonSelectController.IsHide);
+
+        await m_tamamonSelectController.Hide();
+
+        m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
     }
 
     /// <summary>
@@ -227,5 +261,28 @@ public class BattleController : MonoBehaviour
     public async UniTask OnResult()
     {
         await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+    }
+
+    /// <summary>
+    /// 入力受付
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<int> OnInput(CommandWindowBase window, bool isEscape = false)
+    {
+        bool isReturnKey = false;
+        int index = -1;
+        while (!isReturnKey)
+        {
+            index = await window.SelectCommand();
+            if (isEscape)
+            {
+                if (index != -1) isReturnKey = true;
+            }
+            else
+            {
+                if (index != -1 && index != 100) isReturnKey = true;
+            }
+        }
+        return index;
     }
 }
