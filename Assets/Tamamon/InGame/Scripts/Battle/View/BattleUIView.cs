@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
+/// <summary>
+/// タマモン情報表示クラス
+/// </summary>
 public class BattleUIView : MonoBehaviour
 {
     [SerializeField]
@@ -30,9 +32,14 @@ public class BattleUIView : MonoBehaviour
     [SerializeField]
     private RectMask2D m_playerExpBar = default;
 
-    [SerializeField]
-    private TextMeshProUGUI m_messageText = default;
+    private bool m_isEnemyHpBarAnimation = false;
+    public bool IsEnemyHpBarAnimation => m_isEnemyHpBarAnimation;
 
+    private bool m_isPlayerHpBarAnimation = false;
+    public bool IsPlayerHpBarAnimation => m_isPlayerHpBarAnimation;
+
+    private bool m_isPlayerExpBarAnimation = false;
+    public bool IsPlayerExpBarAnimation => m_isPlayerExpBarAnimation;
 
     private readonly int MaxHpAdjustValue = 80;
     private readonly int MinHpAdjustValue = 312;
@@ -40,7 +47,15 @@ public class BattleUIView : MonoBehaviour
     private readonly int MaxExpAdjustValue = 67;
     private readonly int MinExpAdjustValue = 369;
 
-    public void SetEnemyUI(string name, Tamamon.SexType sexType, int level, int maxHP, int nowHP)
+    /// <summary>
+    /// エネミー情報表示
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="sexType"></param>
+    /// <param name="level"></param>
+    /// <param name="maxHP"></param>
+    /// <param name="nowHP"></param>
+    public void ShowEnemyUI(string name, Tamamon.SexType sexType, int level, int maxHP, int nowHP)
     {
         m_enemyNameText.text = name;
 
@@ -60,10 +75,20 @@ public class BattleUIView : MonoBehaviour
 
         m_enemyLevelText.text = $"Lv:{level}";
 
-        SetEnemyHpBar(maxHP, nowHP);
+        ShowEnemyHpBar(maxHP, nowHP);
     }
 
-    public void SetPlayerUI(string name, Tamamon.SexType sexType, int level, int maxExp, int nowExp, int maxHP, int nowHP)
+    /// <summary>
+    /// プレイヤー情報表示
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="sexType"></param>
+    /// <param name="level"></param>
+    /// <param name="maxExp"></param>
+    /// <param name="nowExp"></param>
+    /// <param name="maxHP"></param>
+    /// <param name="nowHP"></param>
+    public void ShowPlayerUI(string name, Tamamon.SexType sexType, int level, int maxExp, int nowExp, int maxHP, int nowHP)
     {
         m_playerNameText.text = name;
 
@@ -85,11 +110,16 @@ public class BattleUIView : MonoBehaviour
 
         m_playerHpText.text = $"{nowHP}/{maxHP}";
 
-        SetPlayerExpBar(maxExp, nowExp);
-        SetPlayerHpBar(maxHP, nowHP);
+        ShowPlayerExpBar(maxExp, nowExp);
+        ShowPlayerHpBar(maxHP, nowHP);
     }
 
-    public void SetEnemyHpBar(int maxHP, int nowHP)
+    /// <summary>
+    /// エネミーHP表示
+    /// </summary>
+    /// <param name="maxHP"></param>
+    /// <param name="nowHP"></param>
+    public void ShowEnemyHpBar(int maxHP, int nowHP)
     {
         // HP割合計算
         float value = MinHpAdjustValue - MaxHpAdjustValue;
@@ -105,7 +135,12 @@ public class BattleUIView : MonoBehaviour
         m_enemyHpBar.padding = new Vector4(0, 0, value, 0);
     }
 
-    public void SetPlayerHpBar(int maxHP, int nowHP)
+    /// <summary>
+    /// プレイヤーHP表示
+    /// </summary>
+    /// <param name="maxHP"></param>
+    /// <param name="nowHP"></param>
+    public void ShowPlayerHpBar(int maxHP, int nowHP)
     {
         // HP割合計算
         float value = MinHpAdjustValue - MaxHpAdjustValue;
@@ -121,7 +156,12 @@ public class BattleUIView : MonoBehaviour
         m_playerHpBar.padding = new Vector4(0, 0, value, 0);
     }
 
-    public void SetPlayerExpBar(int maxExp, int nowExp)
+    /// <summary>
+    /// プレイヤーEXP表示
+    /// </summary>
+    /// <param name="maxExp"></param>
+    /// <param name="nowExp"></param>
+    public void ShowPlayerExpBar(int maxExp, int nowExp)
     {
         // Exp割合計算
         float value = MinExpAdjustValue - MaxExpAdjustValue;
@@ -137,18 +177,87 @@ public class BattleUIView : MonoBehaviour
         m_playerExpBar.padding = new Vector4(0, 0, value, 0);
     }
 
+    /// <summary>
+    /// エネミーHP更新
+    /// </summary>
+    /// <param name="maxHP"></param>
+    /// <param name="nowHP"></param>
+    /// <param name="damage"></param>
     public void UpdateEnemyHpBar(int maxHP, int nowHP, int damage)
     {
+        m_isEnemyHpBarAnimation = true;
+        float value = MinHpAdjustValue - MaxHpAdjustValue;
+        nowHP -= damage;
 
+        float ratio = 1f - ((float)nowHP / (float)maxHP);
+        value = value * ratio + MaxHpAdjustValue;
+        float damageValue = 0f;
+        DOTween.To(
+            () => m_enemyHpBar.padding.z,
+            x => damageValue = x,
+            value,
+            1f)
+            .OnUpdate(() => m_enemyHpBar.padding = new Vector4(0, 0, damageValue, 0))
+            .OnComplete(() =>
+            {
+                m_enemyHpBar.padding = new Vector4(0, 0, value, 0);
+                m_isEnemyHpBarAnimation = false;
+            });
     }
 
+    /// <summary>
+    /// プレイヤーHP更新
+    /// </summary>
+    /// <param name="maxHP"></param>
+    /// <param name="nowHP"></param>
+    /// <param name="damage"></param>
     public void UpdatePlayerHpBar(int maxHP, int nowHP, int damage)
     {
+        m_isPlayerHpBarAnimation = true;
+        float value = MinHpAdjustValue - MaxHpAdjustValue;
+        nowHP -= damage;
 
+        float ratio = 1f - ((float)nowHP / (float)maxHP);
+        value = value * ratio + MaxHpAdjustValue;
+        float damageValue = 0f;
+        DOTween.To(
+            () => m_playerHpBar.padding.z,
+            x => damageValue = x,
+            value,
+            1f)
+            .OnUpdate(() => m_playerHpBar.padding = new Vector4(0, 0, damageValue, 0))
+            .OnComplete(() =>
+            {
+                m_playerHpBar.padding = new Vector4(0, 0, value, 0);
+                m_isPlayerHpBarAnimation = false;
+            });
     }
 
+    /// <summary>
+    /// プレイヤーEXP更新
+    /// </summary>
+    /// <param name="maxExp"></param>
+    /// <param name="nowExp"></param>
+    /// <param name="exp"></param>
     public void UpdatePlayerExpBar(int maxExp, int nowExp, int exp)
     {
+        m_isPlayerExpBarAnimation = true;
+        float value = MinExpAdjustValue - MaxExpAdjustValue;
+        nowExp += exp;
 
+        float ratio = 1f - ((float)nowExp / (float)maxExp);
+        value = value * ratio + MaxExpAdjustValue;
+        float expValue = 0f;
+        DOTween.To(
+            () => m_playerExpBar.padding.z,
+            x => expValue = x,
+            value,
+            1f)
+            .OnUpdate(() => m_playerExpBar.padding = new Vector4(0, 0, expValue, 0))
+            .OnComplete(() =>
+            {
+                m_playerExpBar.padding = new Vector4(0, 0, value, 0);
+                m_isPlayerExpBarAnimation = false;
+            });
     }
 }
