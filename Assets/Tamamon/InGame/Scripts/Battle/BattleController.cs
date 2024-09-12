@@ -118,11 +118,15 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnActionSelect()
     {
+        // TextWindow表示切替
+        m_battleTextWindowView.BattleUIMessageTextWindow.gameObject.SetActive(true);
+        m_battleTextWindowView.BattleUIActionTextWindow.gameObject.SetActive(true);
+        m_battleTextWindowView.BattleUITechniqueTextWindow.gameObject.SetActive(false);
+        m_battleTextWindowView.BattleUITechniqueInfoTextWindow.gameObject.SetActive(false);
+
         m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
         m_waitMessage = string.Format(m_waitMessage, m_playerTamamon.Name);
         m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageText(m_waitMessage);
-
-        m_battleTextWindowView.BattleUIActionTextWindow.gameObject.SetActive(true);
 
         m_battleTextWindowView.BattleUIActionTextWindow.OnInitialize(m_actionCommandList);
 
@@ -138,13 +142,14 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnTechniqueSelect()
     {
+        // TextWindow表示切替
         m_battleTextWindowView.BattleUIMessageTextWindow.gameObject.SetActive(false);
         m_battleTextWindowView.BattleUIActionTextWindow.gameObject.SetActive(false);
-
         m_battleTextWindowView.BattleUITechniqueTextWindow.gameObject.SetActive(true);
         m_battleTextWindowView.BattleUITechniqueInfoTextWindow.gameObject.SetActive(true);
 
         m_battleTextWindowView.BattleUITechniqueTextWindow.OnInitialize(m_TechiqueCommandList);
+        m_battleTextWindowView.BattleUITechniqueInfoTextWindow.ShowText(35, 2, "ノーマル");
 
         await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
@@ -158,6 +163,12 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnExecute()
     {
+        // TextWindow表示切替
+        m_battleTextWindowView.BattleUIMessageTextWindow.gameObject.SetActive(true);
+        m_battleTextWindowView.BattleUIActionTextWindow.gameObject.SetActive(false);
+        m_battleTextWindowView.BattleUITechniqueTextWindow.gameObject.SetActive(false);
+        m_battleTextWindowView.BattleUITechniqueInfoTextWindow.gameObject.SetActive(false);
+
         m_battleUIView.UpdatePlayerHpBar(m_playerTamamon.MaxHP, m_playerTamamon.NowHP, m_playerTamamon.MaxHP);
 
         await UniTask.WaitWhile(() => m_battleUIView.IsPlayerHpBarAnimation);
@@ -179,6 +190,7 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnTurnEnd()
     {
+        // TextWindow表示切替
         m_battleTextWindowView.BattleUIMessageTextWindow.gameObject.SetActive(true);
         m_battleTextWindowView.BattleUIActionTextWindow.gameObject.SetActive(false);
         m_battleTextWindowView.BattleUITechniqueTextWindow.gameObject.SetActive(false);

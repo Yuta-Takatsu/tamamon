@@ -215,6 +215,7 @@ public class BattleUIView : MonoBehaviour
     {
         m_isPlayerHpBarAnimation = true;
         float value = MinHpAdjustValue - MaxHpAdjustValue;
+        int hp = nowHP;
         nowHP -= damage;
 
         float ratio = 1f - ((float)nowHP / (float)maxHP);
@@ -230,6 +231,23 @@ public class BattleUIView : MonoBehaviour
             {
                 m_playerHpBar.padding = new Vector4(0, 0, value, 0);
                 m_isPlayerHpBarAnimation = false;
+            });
+        DOTween.To(
+            () => hp,
+            x => hp = x,
+            nowHP,
+            1f)
+            .OnUpdate(() =>
+            {
+                if (hp < 1)
+                {
+                    hp = 0;
+                }
+                m_playerHpText.text = $"{hp}/{maxHP}";
+            })
+            .OnComplete(() =>
+            {
+                m_playerHpText.text = $"{hp}/{maxHP}";
             });
     }
 
