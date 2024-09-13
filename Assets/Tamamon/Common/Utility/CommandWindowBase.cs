@@ -13,6 +13,7 @@ public class CommandWindowBase : MonoBehaviour
     protected List<CanvasGroup> m_arrowUIObjectList = new List<CanvasGroup>();
 
     protected int m_selectIndex = 0;
+    protected int m_commandNum = 0;
     protected CanvasGroup m_prevArrowUIObject = default;
 
     protected readonly int CloseIndex = 100;
@@ -22,9 +23,10 @@ public class CommandWindowBase : MonoBehaviour
     public virtual void OnInitialize(List<string> comanndTextList)
     {
         int index = 0;
+        m_commandNum = comanndTextList.Count;
         foreach (var command in m_commandTextList)
         {
-            if (index < comanndTextList.Count)
+            if (index < m_commandNum)
             {
                 command.text = comanndTextList[index];
             }
@@ -50,7 +52,7 @@ public class CommandWindowBase : MonoBehaviour
     /// <param name="index"></param>
     public virtual void ShowArrowUI(int index)
     {
-        if (index >= m_arrowUIObjectList.Count || index < 0) return;
+        if (index >= m_commandNum || index < 0) return;
 
         m_arrowUIObjectList[index].gameObject.SetActive(true);
 

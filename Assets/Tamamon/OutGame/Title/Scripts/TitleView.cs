@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.U2D;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using Tamamon.Framework;
@@ -18,6 +19,9 @@ namespace Tamamon.OutGame
         [SerializeField]
         private Image m_tamamonImage = default;
 
+        [SerializeField]
+        private SpriteAtlas m_tamamonSpriteAtlas = default;
+
 
         public async UniTask OnInitialize()
         {
@@ -25,7 +29,7 @@ namespace Tamamon.OutGame
 
             ChangeScene().Forget();
 
-            await UniTask.Delay(TimeSpan.FromSeconds(7f));
+            await UniTask.Delay(TimeSpan.FromSeconds(13f));
 
             m_titleLogoImage.transform.DOLocalMove(new Vector3(0, m_titleLogoImage.transform.localPosition.y, 0), 0.5f).SetEase(Ease.OutBack).SetLink(gameObject);
 
@@ -44,6 +48,9 @@ namespace Tamamon.OutGame
         public async UniTask PlayLeftOutAnimation()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(3f));
+            int id = UnityEngine.Random.Range(1, m_tamamonSpriteAtlas.spriteCount + 1);        
+            m_tamamonImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
+
             m_tamamonImage.transform.localScale = new Vector3(1, 1, 1);
             m_tamamonImage.transform.DOLocalJump(new Vector3(-2000f, m_tamamonImage.transform.localPosition.y, 0), 50, 20, 7f).OnComplete(async () => await PlayRightOutAnimation()).SetLink(gameObject); ;
         }
@@ -51,6 +58,10 @@ namespace Tamamon.OutGame
         public async UniTask PlayRightOutAnimation()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(3f));
+
+            int id = UnityEngine.Random.Range(1, m_tamamonSpriteAtlas.spriteCount + 1);
+            m_tamamonImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
+
             m_tamamonImage.transform.localScale = new Vector3(-1, 1, 1);
             m_tamamonImage.transform.DOLocalJump(new Vector3(2000f, m_tamamonImage.transform.localPosition.y, 0), 50, 20, 5f).OnComplete(async () => await PlayLeftOutAnimation()).SetLink(gameObject); ;
         }

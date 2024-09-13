@@ -32,7 +32,7 @@ public class BattleController : MonoBehaviour
     private string m_bringOutMessage = "行け ! {0} !!";
 
     private string m_waitMessage = "{0} はどうする？";
-    private string m_escapeMessage = "{0} は逃げた";
+    private string m_escapeMessage = "{0} は逃げだした";
 
     private List<string> m_actionCommandList = new List<string>() { "戦う", "バッグ", "タマモン", "逃げる" };
     private List<string> m_TechiqueCommandList = new List<string>() { "シャドーボール", "パワージェム", "大地の力" };
