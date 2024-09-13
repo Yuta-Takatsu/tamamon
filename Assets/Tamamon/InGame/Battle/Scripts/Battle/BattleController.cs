@@ -93,6 +93,9 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnEncount()
     {
+
+        await SceneManager.Instance.FadeOut();
+
         m_battleTamamonView.PlayEncountEnemyAnimation();
 
         await UniTask.WaitWhile(() => m_battleTamamonView.IsEncountEnemyAnimation());
