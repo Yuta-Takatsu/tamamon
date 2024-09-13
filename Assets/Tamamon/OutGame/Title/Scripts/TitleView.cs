@@ -1,56 +1,69 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro;
+using UnityEngine.U2D;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
+using Tamamon.Framework;
 
-public class TitleView : MonoBehaviour
+namespace Tamamon.OutGame
 {
-    [SerializeField]
-    private Image m_titleLogoImage = default;
-
-    [SerializeField]
-    private Button m_tapButton = default;
-
-    [SerializeField]
-    private CanvasGroup m_tapTextObj = default;
-
-    [SerializeField]
-    private Image m_tamamonImage = default;
-
-
-    public async UniTask OnInitialize()
+    public class TitleView : MonoBehaviour
     {
-        m_titleLogoImage.transform.localPosition = new Vector2(1800f, m_titleLogoImage.transform.localPosition.y);
+        [SerializeField]
+        private Image m_titleLogoImage = default;
 
-        await UniTask.Delay(TimeSpan.FromSeconds(7f));
+        [SerializeField]
+        private CanvasGroup m_tapTextObj = default;
 
-        m_titleLogoImage.transform.DOLocalMove(new Vector3(0, m_titleLogoImage.transform.localPosition.y, 0), 0.5f).SetEase(Ease.OutBack).SetLink(gameObject);
+        [SerializeField]
+        private Image m_tamamonImage = default;
 
-        m_tapTextObj.alpha = 1f;
-        m_tapTextObj.DOFade(0.0f, 1f).SetEase(Ease.InCubic).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject); ;
+        [SerializeField]
+        private SpriteAtlas m_tamamonSpriteAtlas = default;
 
-        m_tapButton.onClick.AddListener(() => SceneManager.LoadScene("Battle"));
 
-        await UniTask.Delay(TimeSpan.FromSeconds(5f));
+        public async UniTask OnInitialize()
+        {
+            m_titleLogoImage.transform.localPosition = new Vector2(1800f, m_titleLogoImage.transform.localPosition.y);
 
-        await PlayLeftOutAnimation();
-    }
+            ChangeScene().Forget();
 
-    public async UniTask PlayLeftOutAnimation()
-    {
-        await UniTask.Delay(TimeSpan.FromSeconds(3f));
-        m_tamamonImage.transform.localScale = new Vector3(1, 1, 1);
-        m_tamamonImage.transform.DOLocalJump(new Vector3(-2000f, m_tamamonImage.transform.localPosition.y, 0), 50, 20, 7f).OnComplete(async () => await PlayRightOutAnimation()).SetLink(gameObject); ;
-    }
+            await UniTask.Delay(TimeSpan.FromSeconds(13f));
 
-    public async UniTask PlayRightOutAnimation()
-    {
-        await UniTask.Delay(TimeSpan.FromSeconds(3f));
-        m_tamamonImage.transform.localScale = new Vector3(-1, 1, 1);
-        m_tamamonImage.transform.DOLocalJump(new Vector3(2000f, m_tamamonImage.transform.localPosition.y, 0), 50, 20, 5f).OnComplete(async () => await PlayLeftOutAnimation()).SetLink(gameObject); ;
+            m_titleLogoImage.transform.DOLocalMove(new Vector3(0, m_titleLogoImage.transform.localPosition.y, 0), 0.5f).SetEase(Ease.OutBack).SetLink(gameObject);
+
+            m_tapTextObj.alpha = 1f;
+            m_tapTextObj.DOFade(0.0f, 1f).SetEase(Ease.InCubic).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject); ;
+
+            await PlayLeftOutAnimation();
+        }
+
+        public async UniTask ChangeScene()
+        {
+            await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+            await SceneManager.Instance.LoadSceneAsync("Battle",UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        }
+
+        public async UniTask PlayLeftOutAnimation()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(3f));
+            int id = UnityEngine.Random.Range(1, m_tamamonSpriteAtlas.spriteCount + 1);        
+            m_tamamonImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
+
+            m_tamamonImage.transform.localScale = new Vector3(1, 1, 1);
+            m_tamamonImage.transform.DOLocalJump(new Vector3(-2000f, m_tamamonImage.transform.localPosition.y, 0), 50, 20, 7f).OnComplete(async () => await PlayRightOutAnimation()).SetLink(gameObject); ;
+        }
+
+        public async UniTask PlayRightOutAnimation()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(3f));
+
+            int id = UnityEngine.Random.Range(1, m_tamamonSpriteAtlas.spriteCount + 1);
+            m_tamamonImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
+
+            m_tamamonImage.transform.localScale = new Vector3(-1, 1, 1);
+            m_tamamonImage.transform.DOLocalJump(new Vector3(2000f, m_tamamonImage.transform.localPosition.y, 0), 50, 20, 5f).OnComplete(async () => await PlayLeftOutAnimation()).SetLink(gameObject); ;
+        }
     }
 }
