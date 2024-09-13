@@ -16,7 +16,8 @@ namespace Tamamon.Framework
         public enum BGM_Type
         {
             Title = 0,
-            Battle = 1,
+            Adventure = 1,
+            Battle = 2,
             SILENCE = 999,
         }
 
