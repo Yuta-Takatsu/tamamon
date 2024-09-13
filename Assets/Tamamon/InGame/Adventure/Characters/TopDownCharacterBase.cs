@@ -18,6 +18,15 @@ public class TopDownCharacterBase : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// èâä˙âª
+    /// </summary>
+    public virtual void OnInitialize()
+    {
+        m_rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+    }
+
+
     // Update is called once per frame
     void Update()
     {

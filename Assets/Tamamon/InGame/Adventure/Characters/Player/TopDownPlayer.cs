@@ -10,10 +10,18 @@ public class TopDownPlayer : TopDownCharacterBase
     // Start is called before the first frame update
     void Start()
     {
-        
+        OnInitialize();
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// èâä˙âª
+    /// </summary>
+    public override void OnInitialize()
+    {
+        base.OnInitialize();
+    }
+
+    // Update is called fixed once per frame
     void FixedUpdate()
 	{
 		if ( Input.GetKey(KeyCode.W) ) {
