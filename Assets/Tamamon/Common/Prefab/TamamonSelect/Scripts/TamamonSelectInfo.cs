@@ -33,21 +33,21 @@ public class TamamonSelectInfo : MonoBehaviour
     /// <param name="sexType"></param>
     /// <param name="maxHP"></param>
     /// <param name="nowHP"></param>
-    public void OnInitialize(int index, string name, int level, Tamamon.SexType sexType, int maxHP, int nowHP)
+    public void OnInitialize(int index, string name, int level, TamamonData.SexType sexType, int maxHP, int nowHP)
     {
         m_nameText.text = name;
         m_levelText.text = $"Lv:{level}";
 
         switch (sexType)
         {
-            case Tamamon.SexType.None:
+            case TamamonData.SexType.None:
                 m_sexText.text = string.Empty;
                 break;
 
-            case Tamamon.SexType.Male:
+            case TamamonData.SexType.Male:
                 m_sexText.text = "Åâ";
                 break;
-            case Tamamon.SexType.Female:
+            case TamamonData.SexType.Female:
                 m_sexText.text = "Åä";
                 break;
         }
