@@ -104,6 +104,10 @@ public class BattleModel
     private TamamonStatusData m_playerStatusData = default;
     public TamamonStatusData PlayerStatusData { get => m_playerStatusData; set => m_playerStatusData = value; }
 
+    private List<TamamonStatusData> m_enemyStatusDataList = new List<TamamonStatusData>();
+
+    private List<TamamonStatusData> m_playerStatusDataList = new List<TamamonStatusData>();
+
     /// <summary>
     /// ステート切り替え時に呼ばれるコールバックを登録
     /// </summary>
@@ -120,6 +124,60 @@ public class BattleModel
     public void SetCallbackDictionary(BattleStateType state, System.Action onCallback)
     {
         m_stateCallbackDictionary.Add(state, onCallback);
+    }
+
+    /// <summary>
+    /// エネミーの手持ちリストを取得
+    /// </summary>
+    /// <param name="list"></param>
+    public void SetEnemyList(List<TamamonStatusData> list)
+    {
+        m_enemyStatusDataList = list;
+    }
+
+    /// <summary>
+    /// エネミーの手持ちを追加
+    /// </summary>
+    /// <param name="data"></param>
+    public void AddEnemyList(TamamonStatusData data)
+    {
+        m_enemyStatusDataList.Add(data);
+    }
+
+    /// <summary>
+    /// エネミーの手持ちリストを返す
+    /// </summary>
+    /// <returns></returns>
+    public List<TamamonStatusData> GetEnemyList()
+    {
+        return m_enemyStatusDataList;
+    }
+
+    /// <summary>
+    /// プレイヤーの手持ちリストを取得
+    /// </summary>
+    /// <param name="list"></param>
+    public void SetPlayerList(List<TamamonStatusData> list)
+    {
+        m_playerStatusDataList = list;
+    }
+
+    /// <summary>
+    /// プレイヤーの手持ちを追加
+    /// </summary>
+    /// <param name="data"></param>
+    public void AddPlayerList(TamamonStatusData data)
+    {
+        m_playerStatusDataList.Add(data);
+    }
+
+    /// <summary>
+    /// プレイヤーの手持ちリストを返す
+    /// </summary>
+    /// <returns></returns>
+    public List<TamamonStatusData> GetPlayerList()
+    {
+        return m_playerStatusDataList;
     }
 
     /// <summary>

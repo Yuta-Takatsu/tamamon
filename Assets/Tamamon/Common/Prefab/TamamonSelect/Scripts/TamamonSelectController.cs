@@ -10,6 +10,9 @@ public class TamamonSelectController : MonoBehaviour
     private List<TamamonSelectInfo> m_tamamonInfoList = new List<TamamonSelectInfo>();
 
     [SerializeField]
+    private TamamonSelectInfo m_tamamonInfoObject = default;
+
+    [SerializeField]
     private Image m_closeImage = default;
 
     [SerializeField]
@@ -55,9 +58,11 @@ public class TamamonSelectController : MonoBehaviour
     /// <summary>
     /// èâä˙âª
     /// </summary>
-    public void OnInitialize()
+    public void OnInitialize(List<TamamonStatusData> tamamonStatusDataList)
     {
         m_selectIndex = 0;
+
+
 
         foreach(var info in m_tamamonInfoList)
         {

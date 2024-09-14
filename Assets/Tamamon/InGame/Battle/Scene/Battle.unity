@@ -334,6 +334,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 11548595}
   m_CullTransparentMesh: 1
+--- !u!114 &14397662 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 793822953, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
+  m_PrefabInstance: {fileID: 2097332395823003732}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38624ceb4f172d24da42da240037fd7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &149653036
 GameObject:
   m_ObjectHideFlags: 0
@@ -6760,13 +6771,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2072959122}
     m_Modifications:
+    - target: {fileID: 836560958, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
+      propertyPath: m_tamamonInfoObject
+      value: 
+      objectReference: {fileID: 14397662}
+    - target: {fileID: 836560958, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
+      propertyPath: m_tamamonInfoList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097332395129847484, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097332395129847484, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2097332395558441064, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
       propertyPath: m_Name
       value: TamamonSelectObject
-      objectReference: {fileID: 0}
-    - target: {fileID: 2097332395558441064, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2097332395558441065, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
       propertyPath: m_Pivot.x

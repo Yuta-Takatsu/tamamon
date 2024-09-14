@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -66,10 +67,6 @@ public class BattleController : MonoBehaviour
 
         SoundManager.Instance.PlayBGM(SoundManager.BGM_Type.Battle);
 
-        // 手持ちの数
-        m_enemyCount = 1;
-        m_playerCount = 1;
-
         // ステート変更時のコールバック登録
         m_battleModel.OnStateExecute();
         m_battleModel.SetCallbackDictionary(BattleModel.BattleStateType.Encount, async () => await OnEncount());
@@ -81,12 +78,27 @@ public class BattleController : MonoBehaviour
         m_battleModel.SetCallbackDictionary(BattleModel.BattleStateType.ItemSelect, async () => await OnItemSelect());
         m_battleModel.SetCallbackDictionary(BattleModel.BattleStateType.Result, async () => await OnResult());
 
-        // タマモン情報初期化
-        m_battleModel.EnemyStatusData = new TamamonStatusData();
-        m_battleModel.PlayerStatusData = new TamamonStatusData();
-        m_battleModel.EnemyStatusData.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
-        m_battleModel.PlayerStatusData.OnInitialize(playerId, TamamonData.SexType.Female, 7, 1, 1, 2, 3);
+        // タマモン情報初期化  
+        TamamonStatusData enemyData_1 = new TamamonStatusData();
+        enemyData_1.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
+        m_battleModel.AddEnemyList(enemyData_1);
 
+        TamamonStatusData playerData_1 = new TamamonStatusData();
+        playerData_1.OnInitialize(playerId, TamamonData.SexType.Female, 7, 1, 1, 2, 3);
+        m_battleModel.AddPlayerList(playerData_1);
+
+        TamamonStatusData playerData_2 = new TamamonStatusData();
+        playerData_2.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
+        m_battleModel.AddPlayerList(playerData_2);
+
+        // 手持ちの数
+        m_enemyCount = m_battleModel.GetEnemyList().Count;
+        m_playerCount = m_battleModel.GetPlayerList().Count;
+
+        // 手持ち先頭情報を取得
+        m_battleModel.EnemyStatusData = m_battleModel.GetEnemyList().First();
+        m_battleModel.PlayerStatusData = m_battleModel.GetPlayerList().First();
+        
         // 情報をUIに渡す
         m_battleUIView.ShowEnemyUI(m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Sex, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Level, m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.NowHP);
         m_battleUIView.ShowPlayerUI(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Sex, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Level, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Exp, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowExp, m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP);
@@ -320,7 +332,7 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnTamamonSelect()
     {
-        m_tamamonSelectController.OnInitialize();
+        m_tamamonSelectController.OnInitialize(m_battleModel.GetPlayerList());
 
         await m_tamamonSelectController.Show();
 
@@ -379,6 +391,8 @@ public class BattleController : MonoBehaviour
                 break;
         }
         await SceneManager.Instance.UnLoadSceneAsync("Battle");
+
+        await SoundManager.Instance.StopBGMAsync();
     }
 
     /// <summary>

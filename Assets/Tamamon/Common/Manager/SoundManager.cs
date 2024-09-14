@@ -176,6 +176,26 @@ namespace Tamamon.Framework
         {
             BGM_Sources[0].Stop();
             BGM_Sources[1].Stop();
+
+            BGM_Sources[0].clip = null;
+            BGM_Sources[1].clip = null;
+        }
+        /// <summary>
+        /// BGMäÆëSí‚é~ îÒìØä˙
+        /// </summary>
+        public async UniTask StopBGMAsync()
+        {
+            BGM_Sources[0].DOFade(0, CROSS_FADE_TIME).SetEase(Ease.Linear);
+            BGM_Sources[1].DOFade(0, CROSS_FADE_TIME).SetEase(Ease.Linear);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(CROSS_FADE_TIME));
+
+            BGM_Sources[0].volume = 0;
+            BGM_Sources[1].volume = 0;
+
+            BGM_Sources[0].Stop();
+            BGM_Sources[1].Stop();
+
             BGM_Sources[0].clip = null;
             BGM_Sources[1].clip = null;
         }
@@ -239,10 +259,6 @@ namespace Tamamon.Framework
             BGM_Sources[0].Play();
             BGM_Sources[1].Play();
         }
-
-
-        ////* ñ¢égóp *////
-
 
         /// <summary>
         /// AudioMixerê›íË
