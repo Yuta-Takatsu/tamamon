@@ -15,10 +15,12 @@ public class CommandWindowBase : MonoBehaviour
     protected int m_selectIndex = 0;
     public int SelectIndex => m_selectIndex;
 
+    protected bool m_isEscape = false;
+    public bool IsEscape => m_isEscape;
+
     protected int m_commandNum = 0;
     protected CanvasGroup m_prevArrowUIObject = default;
 
-    protected readonly int CloseIndex = 100;
     /// <summary>
     /// ‰Šú‰»
     /// </summary>

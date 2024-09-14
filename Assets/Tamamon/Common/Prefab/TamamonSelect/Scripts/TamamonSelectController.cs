@@ -101,7 +101,7 @@ public class TamamonSelectController : MonoBehaviour
         int index = await OnInput(m_tamamonSelectTextWindow);
 
         // ステートを変更
-        if (index == 100)
+        if (m_tamamonSelectTextWindow.IsEscape)
         {
             m_tamamonSelectTextWindow.gameObject.SetActive(false);
         }

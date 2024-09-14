@@ -185,7 +185,7 @@ public class BattleController : MonoBehaviour
         int index = await OnInput(m_battleTextWindowView.BattleUITechniqueTextWindow, true);
 
         // ステートを変更
-        if (index == 100)
+        if (m_battleTextWindowView.BattleUITechniqueTextWindow.IsEscape)
         {
             m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
         }
@@ -291,7 +291,6 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnResult()
     {
-
         if (m_battleModel.BattleExecuteState == BattleModel.BattleExecuteType.Escape)
         {
 
@@ -311,7 +310,7 @@ public class BattleController : MonoBehaviour
         while (!isReturnKey)
         {
             isReturnKey = await window.SelectCommand();
-            if (!isEscape && window.SelectIndex == 100) isReturnKey = false;
+            if (!isEscape && window.IsEscape) isReturnKey = false;
         }
         return window.SelectIndex;
     }
