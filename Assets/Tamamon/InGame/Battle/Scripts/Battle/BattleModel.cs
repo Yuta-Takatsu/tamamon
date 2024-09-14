@@ -70,6 +70,19 @@ public class BattleModel
         Wild,
     }
 
+    private WeaknessType m_weaknessTypeState = default;
+    public WeaknessType WeaknessTypeState => m_weaknessTypeState;
+    /// <summary>
+    /// タイプ相性
+    /// </summary>
+    public enum WeaknessType
+    {
+        None,
+        Effective,
+        NotEffective,
+        DontAffective,
+    }
+
     /// <summary>
     /// ステート切り替え時に呼ばれるコールバックを登録
     /// </summary>
@@ -121,6 +134,7 @@ public class BattleModel
             {
                 if (enemyType == effectiveType)
                 {
+                    m_weaknessTypeState = WeaknessType.DontAffective;
                     return 0;
                 }
             }
@@ -130,6 +144,7 @@ public class BattleModel
             {
                 if (enemyType == effectiveType)
                 {
+                    m_weaknessTypeState = WeaknessType.Effective;
                     weaknessBonus += 0.5f;
                     break;
                 }
@@ -140,6 +155,7 @@ public class BattleModel
             {
                 if (enemyType == effectiveType)
                 {
+                    m_weaknessTypeState = WeaknessType.NotEffective;
                     weaknessBonus -= 0.5f;
                     break;
                 }
