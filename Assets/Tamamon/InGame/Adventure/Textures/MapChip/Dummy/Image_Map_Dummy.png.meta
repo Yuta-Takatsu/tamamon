@@ -120,12 +120,12 @@ TextureImporter:
       name: Image_Map_Dummy_0
       rect:
         serializedVersion: 2
-        x: 64
-        y: 192
+        x: 76
+        y: 220
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -141,12 +141,12 @@ TextureImporter:
       name: Image_Map_Dummy_1
       rect:
         serializedVersion: 2
-        x: 128
-        y: 192
+        x: 148
+        y: 220
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -162,12 +162,12 @@ TextureImporter:
       name: Image_Map_Dummy_2
       rect:
         serializedVersion: 2
-        x: 192
-        y: 192
+        x: 220
+        y: 220
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -183,18 +183,18 @@ TextureImporter:
       name: Image_Map_Dummy_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 128
+        x: 4
+        y: 148
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 79ace84cad8327f48949190f03222d83
+      spriteID: be255739794f96940bf1cd6bc2010730
       internalID: 390914129
       vertices: []
       indices: 
@@ -204,18 +204,18 @@ TextureImporter:
       name: Image_Map_Dummy_4
       rect:
         serializedVersion: 2
-        x: 64
-        y: 128
+        x: 76
+        y: 148
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80cab01f60d0e314a811820dd85708fa
+      spriteID: da2f5000b332d8949bb98dafd6baa4ce
       internalID: 974874849
       vertices: []
       indices: 
@@ -225,18 +225,18 @@ TextureImporter:
       name: Image_Map_Dummy_5
       rect:
         serializedVersion: 2
-        x: 128
-        y: 128
+        x: 148
+        y: 148
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a6bf7d943ac9934c87e9640c67b212e
+      spriteID: 9ebfd1fbc6d004943944ba86a1b88f8c
       internalID: -1304305762
       vertices: []
       indices: 
@@ -246,18 +246,18 @@ TextureImporter:
       name: Image_Map_Dummy_6
       rect:
         serializedVersion: 2
-        x: 192
-        y: 128
+        x: 220
+        y: 148
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 02fd2140b9536864092d96b810d32ff4
+      spriteID: 96f8a8731ee118245b86eaa4cca5a189
       internalID: 2108180898
       vertices: []
       indices: 
@@ -267,18 +267,18 @@ TextureImporter:
       name: Image_Map_Dummy_7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
+        x: 4
+        y: 76
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 406774c3b5db7b84b8c31a6a9dd150fb
+      spriteID: c3817f167c4a124429662595a4eb3fa2
       internalID: 461328465
       vertices: []
       indices: 
@@ -288,18 +288,18 @@ TextureImporter:
       name: Image_Map_Dummy_8
       rect:
         serializedVersion: 2
-        x: 64
-        y: 64
+        x: 76
+        y: 76
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4727365cf3b3edf40b968e739f68f9d7
+      spriteID: 0453063d568119940b87dacbd778d412
       internalID: 37074458
       vertices: []
       indices: 
@@ -309,18 +309,18 @@ TextureImporter:
       name: Image_Map_Dummy_9
       rect:
         serializedVersion: 2
-        x: 128
-        y: 64
+        x: 148
+        y: 76
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8b08595b1ac18c34c85742d30ef23e5d
+      spriteID: 82f51d3084ec6634d940a90a5d5b2d79
       internalID: -1300326411
       vertices: []
       indices: 
@@ -330,18 +330,18 @@ TextureImporter:
       name: Image_Map_Dummy_10
       rect:
         serializedVersion: 2
-        x: 192
-        y: 64
+        x: 220
+        y: 76
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d0d4b4f615818f3499fd6f7ef868bd3a
+      spriteID: f2f83b553155cab428ef9d74de70494d
       internalID: 438696578
       vertices: []
       indices: 
@@ -351,18 +351,18 @@ TextureImporter:
       name: Image_Map_Dummy_11
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 4
+        y: 4
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a3d14b649e2fe7a4cba4145787931f63
+      spriteID: b4c00676368309f4a8f7639e8c7507f7
       internalID: 86407679
       vertices: []
       indices: 
@@ -372,18 +372,18 @@ TextureImporter:
       name: Image_Map_Dummy_12
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
+        x: 76
+        y: 4
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 89e94c6d3630a50418a47ebb26623429
+      spriteID: eb74a8b9378f2bb40b37c32b2c1ff474
       internalID: 894877668
       vertices: []
       indices: 
@@ -393,61 +393,19 @@ TextureImporter:
       name: Image_Map_Dummy_13
       rect:
         serializedVersion: 2
-        x: 128
-        y: 0
+        x: 148
+        y: 4
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 95c91ce8e05534d418dd0cb1814454f2
+      spriteID: a4edb3b31d8ebfc4a890a6d9d872bc9e
       internalID: -1871947474
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Image_Map_Dummy_14
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dcc7129be9d65b34e8a4f3ea2a8f8e16
-      internalID: -1404588701
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Image_Map_Dummy_15
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 40e6b64bc2f0a15478f55794a5d2be5c
-      internalID: 337912425
       vertices: []
       indices: 
       edges: []
@@ -469,8 +427,6 @@ TextureImporter:
       Image_Map_Dummy_11: 86407679
       Image_Map_Dummy_12: 894877668
       Image_Map_Dummy_13: -1871947474
-      Image_Map_Dummy_14: -1404588701
-      Image_Map_Dummy_15: 337912425
       Image_Map_Dummy_2: -994265960
       Image_Map_Dummy_3: 390914129
       Image_Map_Dummy_4: 974874849
