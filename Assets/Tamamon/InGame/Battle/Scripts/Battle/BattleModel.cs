@@ -83,6 +83,12 @@ public class BattleModel
         DontAffective,
     }
 
+    private TamamonStatusData m_enemyStatusData = default;
+    public TamamonStatusData EnemyStatusData { get => m_enemyStatusData; set => m_enemyStatusData = value; }
+
+    private TamamonStatusData m_playerStatusData = default;
+    public TamamonStatusData PlayerStatusData { get => m_playerStatusData; set => m_playerStatusData = value; }
+
     /// <summary>
     /// ステート切り替え時に呼ばれるコールバックを登録
     /// </summary>
@@ -102,32 +108,23 @@ public class BattleModel
     }
 
     /// <summary>
-    /// 実行
-    /// </summary>
-    /// <param name="state"></param>
-    public void OnExecute(BattleStateType state)
-    {
-        m_stateCallbackDictionary[state]?.Invoke();
-    }
-
-    /// <summary>
     /// ダメージ計算をしてその値を返す
     /// </summary>
     /// <returns></returns>
-    public int GetDamageValue(TamamonStatusData enemyData, TamamonStatusData playerData, int index)
+    public int GetDamageValue(int index)
     {
         // 仮
         // 威力 * 0.8 * タイプ一致ボーナス * 相性
-        int power = playerData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Power;
+        int power = m_playerStatusData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Power;
         float adjustValue = 0.8f;
         float typeBonus = 1.0f;
         float weaknessBonus = 1.0f;
 
         // 使用技タイプ
-        TypeData.Type techniqueType = playerData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Type;
+        TypeData.Type techniqueType = m_playerStatusData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Type;
 
         // タイプ相性計算
-        foreach (var enemyType in enemyData.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
+        foreach (var enemyType in m_enemyStatusData.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
         {
             // 無効
             foreach (var effectiveType in TypeData.DontAffectDictionary[techniqueType])
@@ -163,7 +160,7 @@ public class BattleModel
         }
 
         // タイプ一致ボーナス計算
-        foreach (var playerType in playerData.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
+        foreach (var playerType in m_playerStatusData.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
         {
             if (playerType == techniqueType)
             {
@@ -171,5 +168,77 @@ public class BattleModel
             }
         }
         return (int)(power * adjustValue * typeBonus * weaknessBonus);
+    }
+
+    /// <summary>
+    /// 瀕死のエネミータマモンがいるか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsEnemyFainting()
+    {
+        return m_enemyStatusData.TamamonStatusDataInfo.NowHP <= 0;
+    }
+
+    /// <summary>
+    /// 瀕死のプレイヤータマモンがいるか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsPlayerFainting()
+    {
+        return m_playerStatusData.TamamonStatusDataInfo.NowHP <= 0;
+    }
+
+    /// <summary>
+    /// 状態異常のタマモンがいるか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsStatusAilment()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// 拘束されているかどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsBind()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// 天候が変わっているかどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsWeather()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// フィールドが変わっているかどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsField()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// 設置物があるかどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsInstallation()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// 実行
+    /// </summary>
+    /// <param name="state"></param>
+    private void OnExecute(BattleStateType state)
+    {
+        m_stateCallbackDictionary[state]?.Invoke();
     }
 }
