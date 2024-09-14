@@ -96,4 +96,64 @@ public class BattleModel
     {
         m_stateCallbackDictionary[state]?.Invoke();
     }
+
+    /// <summary>
+    /// ダメージ計算をしてその値を返す
+    /// </summary>
+    /// <returns></returns>
+    public int GetDamageValue(TamamonStatusData enemyData, TamamonStatusData playerData, int index)
+    {
+        // 仮
+        // 威力 * 0.8 * タイプ一致ボーナス * 相性
+        int power = playerData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Power;
+        float adjustValue = 0.8f;
+        float typeBonus = 1.0f;
+        float weaknessBonus = 1.0f;
+
+        // 使用技タイプ
+        TypeData.Type techniqueType = playerData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Type;
+
+        // タイプ相性計算
+        foreach (var enemyType in enemyData.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
+        {
+            // 無効
+            foreach (var effectiveType in TypeData.DontAffectDictionary[techniqueType])
+            {
+                if (enemyType == effectiveType)
+                {
+                    return 0;
+                }
+            }
+
+            // 抜群
+            foreach (var effectiveType in TypeData.EffectiveDictionary[techniqueType])
+            {
+                if (enemyType == effectiveType)
+                {
+                    weaknessBonus += 0.5f;
+                    break;
+                }
+            }
+
+            //いまひとつ
+            foreach (var effectiveType in TypeData.NotEffectiveDictionary[techniqueType])
+            {
+                if (enemyType == effectiveType)
+                {
+                    weaknessBonus -= 0.5f;
+                    break;
+                }
+            }
+        }
+
+        // タイプ一致ボーナス計算
+        foreach (var playerType in playerData.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
+        {
+            if (playerType == techniqueType)
+            {
+                typeBonus = 1.5f;
+            }
+        }
+        return (int)(power * adjustValue * typeBonus * weaknessBonus);
+    }
 }

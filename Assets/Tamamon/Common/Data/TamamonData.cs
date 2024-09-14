@@ -17,6 +17,8 @@ public class TamamonData
 
         public string Name;
 
+        public List<TypeData.Type> TypeList;
+
         public List<int> AbilityIdList;
 
         public int ExpTableId;
@@ -55,22 +57,50 @@ public class TamamonData
         // idからマスター検索
         // 仮データ
         TamamonDataInfomation tamamonDataInfomation = new TamamonDataInfomation();
-        tamamonDataInfomation.Id = id;
-        tamamonDataInfomation.Index = 1;
-        tamamonDataInfomation.Name = "イレイワト";
-        tamamonDataInfomation.ExpTableId = 1;
-        tamamonDataInfomation.SexTypeId = 0;
-        tamamonDataInfomation.HP = 66;
-        tamamonDataInfomation.Attack = 66;
-        tamamonDataInfomation.Defense = 160;
-        tamamonDataInfomation.SpecialAttack = 106;
-        tamamonDataInfomation.SpecialDefense = 70;
-        tamamonDataInfomation.Speed = 44;
+        if (id == 3)
+        {
+            tamamonDataInfomation.Id = id;
+            tamamonDataInfomation.Index = id;
+            tamamonDataInfomation.Name = "ヤドシハンシ";
+            tamamonDataInfomation.ExpTableId = 1;
+            tamamonDataInfomation.SexTypeId = 0;
+            tamamonDataInfomation.HP = 80;
+            tamamonDataInfomation.Attack = 130;
+            tamamonDataInfomation.Defense = 115;
+            tamamonDataInfomation.SpecialAttack = 65;
+            tamamonDataInfomation.SpecialDefense = 85;
+            tamamonDataInfomation.Speed = 55;
 
-        tamamonDataInfomation.AbilityIdList = new List<int>();
-        tamamonDataInfomation.AbilityIdList.Add(1);
-        tamamonDataInfomation.AbilityIdList.Add(2);
+            tamamonDataInfomation.TypeList = new List<TypeData.Type>();
+            tamamonDataInfomation.TypeList.Add(TypeData.Type.Water);
+            tamamonDataInfomation.TypeList.Add(TypeData.Type.Ground);
 
+            tamamonDataInfomation.AbilityIdList = new List<int>();
+            tamamonDataInfomation.AbilityIdList.Add(1);
+            tamamonDataInfomation.AbilityIdList.Add(2);
+        }
+        else
+        {
+            tamamonDataInfomation.Id = id;
+            tamamonDataInfomation.Index = id;
+            tamamonDataInfomation.Name = "イレイワト";
+            tamamonDataInfomation.ExpTableId = 1;
+            tamamonDataInfomation.SexTypeId = 0;
+            tamamonDataInfomation.HP = 66;
+            tamamonDataInfomation.Attack = 66;
+            tamamonDataInfomation.Defense = 160;
+            tamamonDataInfomation.SpecialAttack = 106;
+            tamamonDataInfomation.SpecialDefense = 70;
+            tamamonDataInfomation.Speed = 44;
+
+            tamamonDataInfomation.TypeList = new List<TypeData.Type>();
+            tamamonDataInfomation.TypeList.Add(TypeData.Type.Rock);
+            tamamonDataInfomation.TypeList.Add(TypeData.Type.Ghost);
+
+            tamamonDataInfomation.AbilityIdList = new List<int>();
+            tamamonDataInfomation.AbilityIdList.Add(1);
+            tamamonDataInfomation.AbilityIdList.Add(2);
+        }
         return tamamonDataInfomation;
     }
 }

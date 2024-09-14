@@ -27,6 +27,8 @@ public class TamamonStatusData
         // É}ÉXÉ^Å[ID
         public int Id;
 
+        // É}ÉXÉ^Å[èÓïÒ
+        public TamamonData.TamamonDataInfomation tamamonDataInfomation;
         // ê}ä”No.
         public int Index;
 
@@ -51,41 +53,23 @@ public class TamamonStatusData
         // åªç›ÇÃåoå±íl
         public int NowExp;
 
-        // HPéÌë∞íl
-        public int HP;
-
         // åªç›ÇÃHP
         public int NowHP;
 
         // HPìwóÕíl
         public int EffortHPValue;
 
-        // çUåÇéÌë∞íl
-        public int Attack;
-
         // çUåÇìwóÕíl
         public int EffortAttackValue;
-
-        // ñhå‰éÌë∞íl
-        public int Defense;
 
         // ñhå‰ìwóÕíl
         public int EffortDefenseValue;
 
-        // ì¡çUéÌë∞íl
-        public int SpecialAttack;
-
         // ì¡çUìwóÕíl
         public int EffortSpecialAttackValue;
 
-        // ì¡ñhéÌë∞íl
-        public int SpecialDefense;
-
         // ì¡ñhìwóÕíl
         public int EffortSpecialDefenseValue;
-
-        // ëfëÅÇ≥éÌë∞íl
-        public int Speed;
 
         // ëfëÅÇ≥ìwóÕíl
         public int EffortSpeedValue;
@@ -147,7 +131,7 @@ public class TamamonStatusData
         m_tamamonStatusDataInfo.Level = level;
         m_tamamonStatusDataInfo.Exp = 100;
         m_tamamonStatusDataInfo.NowExp = 0;
-        m_tamamonStatusDataInfo.NowHP = m_tamamonStatusDataInfo.HP;
+        m_tamamonStatusDataInfo.NowHP = m_tamamonStatusDataInfo.tamamonDataInfomation.HP;
         m_tamamonStatusDataInfo.EffortHPValue = 0;
         m_tamamonStatusDataInfo.EffortAttackValue = 0;
         m_tamamonStatusDataInfo.EffortDefenseValue = 0;
@@ -174,12 +158,7 @@ public class TamamonStatusData
         m_tamamonStatusDataInfo.Id = tamamonDataInfomation.Id;
         m_tamamonStatusDataInfo.Index = tamamonDataInfomation.Index;
         m_tamamonStatusDataInfo.Name = tamamonDataInfomation.Name;
-        m_tamamonStatusDataInfo.HP = tamamonDataInfomation.HP;
-        m_tamamonStatusDataInfo.Attack = tamamonDataInfomation.Attack;
-        m_tamamonStatusDataInfo.Defense = tamamonDataInfomation.Defense;
-        m_tamamonStatusDataInfo.SpecialAttack = tamamonDataInfomation.SpecialAttack;
-        m_tamamonStatusDataInfo.SpecialDefense = tamamonDataInfomation.SpecialDefense;
-        m_tamamonStatusDataInfo.Speed = tamamonDataInfomation.Speed;
+        m_tamamonStatusDataInfo.tamamonDataInfomation = tamamonDataInfomation;
     }
 
     /// <summary>
@@ -196,12 +175,12 @@ public class TamamonStatusData
     /// </summary>
     public void UpdateTamamonStatusValueData()
     {
-        m_tamamonStatusValueDataInfo.HP = m_tamamonStatusDataInfo.HP;
-        m_tamamonStatusValueDataInfo.Attack = m_tamamonStatusDataInfo.Attack;
-        m_tamamonStatusValueDataInfo.Defense = m_tamamonStatusDataInfo.Defense;
-        m_tamamonStatusValueDataInfo.SpecialAttack = m_tamamonStatusDataInfo.SpecialAttack;
-        m_tamamonStatusValueDataInfo.SpecialDefense = m_tamamonStatusDataInfo.SpecialDefense;
-        m_tamamonStatusValueDataInfo.Speed = m_tamamonStatusDataInfo.Speed;
+        m_tamamonStatusValueDataInfo.HP = m_tamamonStatusDataInfo.tamamonDataInfomation.HP;
+        m_tamamonStatusValueDataInfo.Attack = m_tamamonStatusDataInfo.tamamonDataInfomation.Attack;
+        m_tamamonStatusValueDataInfo.Defense = m_tamamonStatusDataInfo.tamamonDataInfomation.Defense;
+        m_tamamonStatusValueDataInfo.SpecialAttack = m_tamamonStatusDataInfo.tamamonDataInfomation.SpecialAttack;
+        m_tamamonStatusValueDataInfo.SpecialDefense = m_tamamonStatusDataInfo.tamamonDataInfomation.SpecialDefense;
+        m_tamamonStatusValueDataInfo.Speed = m_tamamonStatusDataInfo.tamamonDataInfomation.Speed;
     }
 
     /// <summary>
