@@ -86,12 +86,12 @@ public class TamamonData
             tamamonDataInfomation.Name = "ÉCÉåÉCÉèÉg";
             tamamonDataInfomation.ExpTableId = 1;
             tamamonDataInfomation.SexTypeId = 0;
-            tamamonDataInfomation.HP = 999;
+            tamamonDataInfomation.HP = 66;
             tamamonDataInfomation.Attack = 66;
             tamamonDataInfomation.Defense = 160;
             tamamonDataInfomation.SpecialAttack = 106;
             tamamonDataInfomation.SpecialDefense = 70;
-            tamamonDataInfomation.Speed = 999;
+            tamamonDataInfomation.Speed = 44;
 
             tamamonDataInfomation.TypeList = new List<TypeData.Type>();
             tamamonDataInfomation.TypeList.Add(TypeData.Type.Rock);

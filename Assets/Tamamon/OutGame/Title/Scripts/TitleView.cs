@@ -48,6 +48,8 @@ namespace Tamamon.OutGame
         public async UniTask PlayLeftOutAnimation()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(3f));
+
+            UnityEngine.Random.InitState(DateTime.Now.Millisecond);
             int id = UnityEngine.Random.Range(1, m_tamamonSpriteAtlas.spriteCount + 1);        
             m_tamamonImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
 
@@ -59,6 +61,7 @@ namespace Tamamon.OutGame
         {
             await UniTask.Delay(TimeSpan.FromSeconds(3f));
 
+            UnityEngine.Random.InitState(DateTime.Now.Millisecond);
             int id = UnityEngine.Random.Range(1, m_tamamonSpriteAtlas.spriteCount + 1);
             m_tamamonImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
 

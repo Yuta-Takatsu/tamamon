@@ -387,7 +387,6 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnTechniqueExecute()
     {
-
         // 素早さチェック
         bool isPlayer = true;
         if (m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.Speed > m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.Speed)
@@ -400,7 +399,9 @@ public class BattleController : MonoBehaviour
         }
         else if (m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.Speed == m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.Speed)
         {
-            isPlayer = UnityEngine.Random.Range(0, 2) == 0 ? false : true;
+            UnityEngine.Random.InitState(DateTime.Now.Millisecond);
+            isPlayer = UnityEngine.Random.Range(0, 100) <= 50 ? false : true;
+            Debug.Log(isPlayer);
         }
 
         if (isPlayer)
