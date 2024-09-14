@@ -86,7 +86,7 @@ public class TamamonData
             tamamonDataInfomation.Name = "ÉCÉåÉCÉèÉg";
             tamamonDataInfomation.ExpTableId = 1;
             tamamonDataInfomation.SexTypeId = 0;
-            tamamonDataInfomation.HP = 66;
+            tamamonDataInfomation.HP = 999;
             tamamonDataInfomation.Attack = 66;
             tamamonDataInfomation.Defense = 160;
             tamamonDataInfomation.SpecialAttack = 106;

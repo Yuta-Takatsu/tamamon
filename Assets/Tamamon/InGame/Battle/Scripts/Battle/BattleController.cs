@@ -26,6 +26,10 @@ public class BattleController : MonoBehaviour
 
     private int m_commandIndex = 0;
 
+    private int m_enemyCount = 0;
+
+    private int m_playerCount = 0;
+
     // 仮データ変数
     private string m_encountMessage = "野生の {0} が現れた！";
 
@@ -44,7 +48,7 @@ public class BattleController : MonoBehaviour
 
     private string m_loseMessage = "{0}は目の前が真っ暗になった...";
 
-    private string m_playerName = "モモ";
+    private string m_playerName = "セラ";
 
     private List<string> m_actionCommandList = new List<string>() { "戦う", "バッグ", "タマモン", "逃げる" };
 
@@ -61,6 +65,10 @@ public class BattleController : MonoBehaviour
         m_battleModel = new BattleModel();
 
         SoundManager.Instance.PlayBGM(SoundManager.BGM_Type.Battle);
+
+        // 手持ちの数
+        m_enemyCount = 1;
+        m_playerCount = 1;
 
         // ステート変更時のコールバック登録
         m_battleModel.OnStateExecute();
@@ -237,6 +245,7 @@ public class BattleController : MonoBehaviour
                 m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
                 await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_escapeMessage);
                 await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+                m_battleModel.BattleEndState = BattleModel.BattleEndType.Escape;
                 m_battleModel.BattleState = BattleModel.BattleStateType.Result;
                 return;
         }
@@ -260,7 +269,8 @@ public class BattleController : MonoBehaviour
         // エネミータマモンが瀕死になったかどうか
         if (m_battleModel.IsEnemyFainting())
         {
-            m_battleModel.BattleTurnEndState = BattleModel.BattleTurnEndType.Win;
+            m_battleModel.BattleTurnEndState = BattleModel.BattleTurnEndType.EnemyDown;
+            m_enemyCount--;
 
             // 戦闘不能アニメーション再生
             await m_battleTamamonView.OnDownAnimation(false);
@@ -270,14 +280,19 @@ public class BattleController : MonoBehaviour
             await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_faintingMessage);
             await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-            m_battleModel.BattleState = BattleModel.BattleStateType.Result;
-            return;
+            if (m_enemyCount < 1)
+            {
+                m_battleModel.BattleEndState = BattleModel.BattleEndType.Win;
+                m_battleModel.BattleState = BattleModel.BattleStateType.Result;
+                return;
+            }
         }
 
         // プレイヤータマモンが瀕死になったかどうか
         if (m_battleModel.IsPlayerFainting())
         {
-            m_battleModel.BattleTurnEndState = BattleModel.BattleTurnEndType.Lose;
+            m_battleModel.BattleTurnEndState = BattleModel.BattleTurnEndType.PlayerDown;
+            m_playerCount--;
 
             // 戦闘不能アニメーション再生
             await m_battleTamamonView.OnDownAnimation(true);
@@ -287,10 +302,15 @@ public class BattleController : MonoBehaviour
             await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_faintingMessage);
             await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-            m_battleModel.BattleState = BattleModel.BattleStateType.Result;
-            return;
+            if (m_playerCount < 1)
+            {
+                m_battleModel.BattleEndState = BattleModel.BattleEndType.Lose;
+                m_battleModel.BattleState = BattleModel.BattleStateType.Result;
+                return;
+            }
         }
 
+        m_battleModel.BattleTurnEndState = BattleModel.BattleTurnEndType.None;
         m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
     }
 
@@ -328,9 +348,9 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnResult()
     {
-        switch (m_battleModel.BattleTurnEndState)
+        switch (m_battleModel.BattleEndState)
         {
-            case BattleModel.BattleTurnEndType.Win:
+            case BattleModel.BattleEndType.Win:
 
                 int exp = 30;
                 m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
@@ -346,16 +366,14 @@ public class BattleController : MonoBehaviour
 
                 await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
                 break;
-            case BattleModel.BattleTurnEndType.Lose:
+            case BattleModel.BattleEndType.Lose:
 
                 m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
                 m_loseMessage = string.Format(m_loseMessage, m_playerName);
                 await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_loseMessage);
                 await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
                 break;
-            case BattleModel.BattleTurnEndType.EnemyDown:
-                break;
-            case BattleModel.BattleTurnEndType.PlayerDown:
+            case BattleModel.BattleEndType.Escape:
                 break;
             default:
                 break;

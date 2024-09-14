@@ -38,6 +38,7 @@ public class BattleModel
     /// </summary>
     public enum BattleExecuteType
     {
+        None,
         Technique, // 技使用
         Change,    // 入れ替え
         Item,      // アイテム使用
@@ -52,10 +53,23 @@ public class BattleModel
     /// </summary>
     public enum BattleTurnEndType
     {
-        Win,
-        Lose,
+        None,
         EnemyDown,
         PlayerDown,
+    }
+
+    private BattleEndType m_battleEndState = default;
+    public BattleEndType BattleEndState { get => m_battleEndState; set => m_battleEndState = value; }
+
+    /// <summary>
+    /// バトル終了時ステート
+    /// </summary>
+    public enum BattleEndType
+    {
+        None,
+        Win,
+        Lose,
+        Escape,
     }
 
     private BattleEventType m_battleEventState = default;
@@ -66,6 +80,7 @@ public class BattleModel
     /// </summary>
     public enum BattleEventType
     {
+        None,
         Trainer,
         Wild,
     }
