@@ -13,6 +13,8 @@ public class CommandWindowBase : MonoBehaviour
     protected List<CanvasGroup> m_arrowUIObjectList = new List<CanvasGroup>();
 
     protected int m_selectIndex = 0;
+    public int SelectIndex => m_selectIndex;
+
     protected int m_commandNum = 0;
     protected CanvasGroup m_prevArrowUIObject = default;
 
@@ -69,7 +71,7 @@ public class CommandWindowBase : MonoBehaviour
     /// コマンド選択
     /// </summary>
     /// <returns></returns>
-    public virtual async UniTask<int> SelectCommand()
+    public virtual async UniTask<bool> SelectCommand()
     {
         await UniTask.WaitUntil(() => Input.anyKeyDown);
 
@@ -77,7 +79,7 @@ public class CommandWindowBase : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                return m_selectIndex;
+                return true;
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -90,7 +92,7 @@ public class CommandWindowBase : MonoBehaviour
                 break;
             }
         }
-        return -1;
+        return false;
     }
 
     public virtual void PlayFlashAnimation(CanvasGroup obj)

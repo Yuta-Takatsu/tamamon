@@ -8,7 +8,7 @@ public class TamamonSelectTextWindow : CommandWindowBase
     /// コマンド選択
     /// </summary>
     /// <returns></returns>
-    public override async UniTask<int> SelectCommand()
+    public override async UniTask<bool> SelectCommand()
     {
         await UniTask.WaitUntil(() => Input.anyKeyDown);
 
@@ -16,11 +16,11 @@ public class TamamonSelectTextWindow : CommandWindowBase
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                return m_selectIndex;
+                return true;
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
-                return CloseIndex;
+                return true;
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -33,6 +33,6 @@ public class TamamonSelectTextWindow : CommandWindowBase
                 break;
             }
         }
-        return -1;
+        return false;
     }
 }

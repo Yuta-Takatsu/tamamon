@@ -10,7 +10,7 @@ using Cysharp.Threading.Tasks;
 /// </summary>
 public class BattleUICommandTextWindow : CommandWindowBase
 {
-    public override async UniTask<int> SelectCommand()
+    public override async UniTask<bool> SelectCommand()
     {
         await UniTask.WaitUntil(() => Input.anyKeyDown);
 
@@ -18,11 +18,11 @@ public class BattleUICommandTextWindow : CommandWindowBase
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                return m_selectIndex;
+                return true;
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
-                return CloseIndex;
+                return true;
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
@@ -49,6 +49,6 @@ public class BattleUICommandTextWindow : CommandWindowBase
                 break;
             }
         }
-        return -1;
+        return false;
     }
 }

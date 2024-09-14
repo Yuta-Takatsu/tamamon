@@ -1,21 +1,14 @@
-using UnityEngine;
-using UnityEngine.UI;
-using DG.Tweening;
+using System.Collections.Generic;
 
-public class TamamonData : MonoBehaviour
+/// <summary>
+/// タマモン情報クラス
+/// </summary>
+public class TamamonData
 {
 
-    [SerializeField]
-    private Image m_tamamonImage = default;
-
-    private readonly float EnemyStartLocalPositionX = -1350f;
-    private readonly float EnemyEndLocalPositionX = 350f;
-
-    private bool m_isAnimation = false;
-    public bool IsAnimation => m_isAnimation;
-
-    private TamamonDataInfomation m_tamamonData = default;
-    public TamamonDataInfomation TamamonDataInfo => m_tamamonData;
+    /// <summary>
+    /// タマモン情報
+    /// </summary>
     public struct TamamonDataInfomation
     {
         public int Id;
@@ -24,17 +17,13 @@ public class TamamonData : MonoBehaviour
 
         public string Name;
 
-        public int Level;
+        public List<int> AbilityIdList;
 
-        public SexType Sex;
+        public int ExpTableId;
 
-        public int MaxExp;
+        public int SexTypeId;
 
-        public int NowExp;
-
-        public int MaxHP;
-
-        public int NowHP;
+        public int HP;
 
         public int Attack;
 
@@ -58,65 +47,30 @@ public class TamamonData : MonoBehaviour
     }
 
     /// <summary>
-    /// タマモン情報取得
+    /// タマモン情報を渡す
     /// </summary>
-    /// <param name="tamamonData"></param>
-    public void SetTamamonData(TamamonDataInfomation tamamonData)
+    /// <param name="id"></param>
+    public TamamonDataInfomation GetTamamonData(int id)
     {
-        m_tamamonData = tamamonData;
-    }
+        // idからマスター検索
+        // 仮データ
+        TamamonDataInfomation tamamonDataInfomation = new TamamonDataInfomation();
+        tamamonDataInfomation.Id = id;
+        tamamonDataInfomation.Index = 1;
+        tamamonDataInfomation.Name = "イレイワト";
+        tamamonDataInfomation.ExpTableId = 1;
+        tamamonDataInfomation.SexTypeId = 0;
+        tamamonDataInfomation.HP = 66;
+        tamamonDataInfomation.Attack = 66;
+        tamamonDataInfomation.Defense = 160;
+        tamamonDataInfomation.SpecialAttack = 106;
+        tamamonDataInfomation.SpecialDefense = 70;
+        tamamonDataInfomation.Speed = 44;
 
-    /// <summary>
-    /// タマモン画像取得
-    /// </summary>
-    /// <param name="sprite"></param>
-    public void SetTamamonImage(Sprite sprite)
-    {
-        m_tamamonImage.sprite = sprite;
-    }
+        tamamonDataInfomation.AbilityIdList = new List<int>();
+        tamamonDataInfomation.AbilityIdList.Add(1);
+        tamamonDataInfomation.AbilityIdList.Add(2);
 
-    /// <summary>
-    /// 座標更新
-    /// </summary>
-    /// <param name="localPosition"></param>
-    public void UpdateImageLocalPosition(Vector2 localPosition)
-    {
-        m_tamamonImage.transform.localPosition = localPosition;
-    }
-
-    public void UpdateImageScale(Vector2 scale)
-    {
-        m_tamamonImage.transform.localScale = scale;
-    }
-
-    public void OnEncountAnimationInitialize(bool isPlayer)
-    {
-        if (isPlayer)
-        {
-            UpdateImageScale(new Vector2(0f, 0f));
-        }
-        else
-        {
-            UpdateImageLocalPosition(new Vector2(EnemyStartLocalPositionX, m_tamamonImage.transform.localPosition.y));
-        }
-    }
-
-    /// <summary>
-    /// バトル開始時アニメーション
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    public void OnEncountAnimation(bool isPlayer)
-    {
-        m_isAnimation = true;
-
-        if (isPlayer)
-        {
-            m_tamamonImage.transform.DOScale(new Vector3(-1, 1, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
-        }
-        else
-        {
-            m_tamamonImage.transform.DOLocalMove(new Vector3(EnemyEndLocalPositionX, m_tamamonImage.transform.localPosition.y, 0), 2f).OnComplete(() => { m_isAnimation = false; });
-        }
+        return tamamonDataInfomation;
     }
 }

@@ -1,67 +1,131 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.U2D;
 using Cysharp.Threading.Tasks;
-using TMPro;
+using DG.Tweening;
 
 /// <summary>
 /// タマモン表示クラス
 /// </summary>
 public class BattleTamamonView : MonoBehaviour
-{
+{ 
     [SerializeField]
-    private TamamonData m_enemyTamamon = default;
+    private Image m_enemyTamamonImage = default;
 
     [SerializeField]
-    private TamamonData m_playerTamamon = default;
+    private Image m_playerTamamonImage = default;
+
+    [SerializeField]
+    private SpriteAtlas m_tamamonSpriteAtlas = default;
+
+    private readonly float EnemyStartLocalPositionX = -1350f;
+    private readonly float EnemyEndLocalPositionX = 350f;
+
+    private bool m_isAnimation = false;
+    public bool IsAnimation => m_isAnimation;
 
     /// <summary>
     /// 初期化
     /// </summary>
-    /// <param name="enemyTamamon"></param>
-    /// <param name="playerTamamon"></param>
-    public void OnInitialize(TamamonData.TamamonDataInfomation enemyTamamon, TamamonData.TamamonDataInfomation playerTamamon)
+    /// <param name="enemyIndex"></param>
+    /// <param name="playerIndex"></param>
+    public void OnInitialize(int enemyIndex, int playerIndex)
     {
-        // 情報をタマモンに渡す
-        m_enemyTamamon.SetTamamonData(enemyTamamon);
-        m_playerTamamon.SetTamamonData(playerTamamon);
+        // 画像表示
+        SetEnemyTamamonImage(enemyIndex);
+        SetPlayerTamamonImage(playerIndex);
 
         // エンカウントアニメーション初期化
-        m_enemyTamamon.OnEncountAnimationInitialize(false);
-        m_playerTamamon.OnEncountAnimationInitialize(true);
+        OnEncountAnimationInitialize(false);
+        OnEncountAnimationInitialize(true);
     }
 
     /// <summary>
     /// エネミーエンカウントアニメーション再生
     /// </summary>
-    public void PlayEncountEnemyAnimation()
+    public async UniTask PlayEncountEnemyAnimation()
     {
-        m_enemyTamamon.OnEncountAnimation(false);
+        await OnEncountAnimation(false);
     }
 
     /// <summary>
     /// プレイヤーエンカウントアニメーション再生
     /// </summary>
-    public void PlayEncountPlayerAnimation()
+    public async UniTask PlayEncountPlayerAnimation()
     {
-        m_playerTamamon.OnEncountAnimation(true);
+        await OnEncountAnimation(true);
     }
 
     /// <summary>
-    /// エネミーエンカウントアニメーション再生状況
+    /// エネミータマモン画像取得
     /// </summary>
-    /// <returns></returns>
-    public bool IsEncountEnemyAnimation()
+    /// <param name="sprite"></param>
+    public void SetEnemyTamamonImage(int id)
     {
-        return m_enemyTamamon.IsAnimation;
+        m_enemyTamamonImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
     }
 
     /// <summary>
-    /// プレイヤーエンカウントアニメーション再生状況
+    /// プレイヤータマモン画像取得
     /// </summary>
-    /// <returns></returns>
-    public bool IsEncountPlayerAnimation()
+    /// <param name="sprite"></param>
+    public void SetPlayerTamamonImage(int id)
     {
-        return m_playerTamamon.IsAnimation;
+        m_playerTamamonImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
+    }
+
+    /// <summary>
+    /// 座標更新
+    /// </summary>
+    /// <param name="localPosition"></param>
+    public void UpdateEnemyLocalPosition(Vector2 localPosition)
+    {
+        m_enemyTamamonImage.transform.localPosition = localPosition;
+    }
+
+    /// <summary>
+    /// スケール更新
+    /// </summary>
+    /// <param name="scale"></param>
+    public void UpdatePlayerImageScale(Vector2 scale)
+    {
+        m_playerTamamonImage.transform.localScale = scale;
+    }
+
+    /// <summary>
+    /// エンカウントアニメーション
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    public void OnEncountAnimationInitialize(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            UpdatePlayerImageScale(new Vector2(0f, 0f));
+        }
+        else
+        {
+            UpdateEnemyLocalPosition(new Vector2(EnemyStartLocalPositionX, m_enemyTamamonImage.transform.localPosition.y));
+        }
+    }
+
+    /// <summary>
+    /// バトル開始時アニメーション
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public async UniTask OnEncountAnimation(bool isPlayer)
+    {
+        m_isAnimation = true;
+
+        if (isPlayer)
+        {
+            m_playerTamamonImage.transform.DOScale(new Vector3(-1, 1, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
+        }
+        else
+        {
+            m_enemyTamamonImage.transform.DOLocalMove(new Vector3(EnemyEndLocalPositionX, m_enemyTamamonImage.transform.localPosition.y, 0), 2f).OnComplete(() => { m_isAnimation = false; });
+        }
+
+        await UniTask.WaitWhile(() => m_isAnimation);
     }
 }

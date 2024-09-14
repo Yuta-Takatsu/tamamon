@@ -201,12 +201,10 @@ public class TamamonSelectController : MonoBehaviour
     public async UniTask<int> OnInput(CommandWindowBase window)
     {
         bool isReturnKey = false;
-        int index = -1;
         while (!isReturnKey)
         {
-            index = await window.SelectCommand();
-            if (index != -1) isReturnKey = true;
+            isReturnKey = await window.SelectCommand();
         }
-        return index;
+        return window.SelectIndex;
     }
 }
