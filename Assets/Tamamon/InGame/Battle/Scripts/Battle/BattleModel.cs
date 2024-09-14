@@ -111,20 +111,35 @@ public class BattleModel
     /// ダメージ計算をしてその値を返す
     /// </summary>
     /// <returns></returns>
-    public int GetDamageValue(int index)
+    public int GetDamageValue(int index,bool isPlayer)
     {
+        TamamonStatusData attackTamamon = m_playerStatusData;
+        TamamonStatusData defenseTamamon = m_enemyStatusData;
+        if (isPlayer)
+        {
+             attackTamamon = m_playerStatusData;
+             defenseTamamon = m_enemyStatusData;
+        }
+        else
+        {
+             attackTamamon = m_enemyStatusData;
+             defenseTamamon = m_playerStatusData;
+        }
+
         // 仮
         // 威力 * 0.8 * タイプ一致ボーナス * 相性
-        int power = m_playerStatusData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Power;
+        int power = attackTamamon.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Power;
         float adjustValue = 0.8f;
         float typeBonus = 1.0f;
         float weaknessBonus = 1.0f;
 
         // 使用技タイプ
-        TypeData.Type techniqueType = m_playerStatusData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Type;
+        TypeData.Type techniqueType = attackTamamon.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Type;
+
+        m_weaknessTypeState = WeaknessType.None;
 
         // タイプ相性計算
-        foreach (var enemyType in m_enemyStatusData.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
+        foreach (var enemyType in defenseTamamon.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
         {
             // 無効
             foreach (var effectiveType in TypeData.DontAffectDictionary[techniqueType])
@@ -142,7 +157,7 @@ public class BattleModel
                 if (enemyType == effectiveType)
                 {
                     m_weaknessTypeState = WeaknessType.Effective;
-                    weaknessBonus += 0.5f;
+                    weaknessBonus += 1f;
                     break;
                 }
             }
@@ -160,7 +175,7 @@ public class BattleModel
         }
 
         // タイプ一致ボーナス計算
-        foreach (var playerType in m_playerStatusData.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
+        foreach (var playerType in attackTamamon.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
         {
             if (playerType == techniqueType)
             {

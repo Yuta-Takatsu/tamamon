@@ -91,7 +91,7 @@ public class TamamonData
             tamamonDataInfomation.Defense = 160;
             tamamonDataInfomation.SpecialAttack = 106;
             tamamonDataInfomation.SpecialDefense = 70;
-            tamamonDataInfomation.Speed = 44;
+            tamamonDataInfomation.Speed = 999;
 
             tamamonDataInfomation.TypeList = new List<TypeData.Type>();
             tamamonDataInfomation.TypeList.Add(TypeData.Type.Rock);

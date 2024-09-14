@@ -42,6 +42,10 @@ public class BattleController : MonoBehaviour
 
     private string m_getExpMessage = "{0}は\n{1} 経験値を もらった";
 
+    private string m_loseMessage = "{0}は目の前が真っ暗になった...";
+
+    private string m_playerName = "モモ";
+
     private List<string> m_actionCommandList = new List<string>() { "戦う", "バッグ", "タマモン", "逃げる" };
 
     public void Start()
@@ -72,7 +76,7 @@ public class BattleController : MonoBehaviour
         // タマモン情報初期化
         m_battleModel.EnemyStatusData = new TamamonStatusData();
         m_battleModel.PlayerStatusData = new TamamonStatusData();
-        m_battleModel.EnemyStatusData.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 1, 2, 3, 4);
+        m_battleModel.EnemyStatusData.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
         m_battleModel.PlayerStatusData.OnInitialize(playerId, TamamonData.SexType.Female, 7, 1, 1, 2, 3);
 
         // 情報をUIに渡す
@@ -220,40 +224,7 @@ public class BattleController : MonoBehaviour
         switch (m_battleModel.BattleExecuteState)
         {
             case BattleModel.BattleExecuteType.Technique:
-
-                m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-                await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList[m_commandIndex].TechniqueData.Name}！");
-
-                m_battleUIView.UpdateEnemyHpBar(m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(m_commandIndex));
-                m_battleModel.EnemyStatusData.UpdateNowHP(m_battleModel.GetDamageValue(m_commandIndex));
-
-                await UniTask.WaitWhile(() => m_battleUIView.IsEnemyHpBarAnimation);
-
-                // タイプ相性テキスト
-                switch (m_battleModel.WeaknessTypeState)
-                {
-                    case BattleModel.WeaknessType.None:
-                        break;
-                    case BattleModel.WeaknessType.Effective:
-                        m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-                        await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_effectiveMessage);
-                        break;
-                    case BattleModel.WeaknessType.NotEffective:
-                        m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-                        await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_notEffectiveMessage);
-                        break;
-                    case BattleModel.WeaknessType.DontAffective:
-                        m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-                        await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_dontAffectiveMessage);
-                        break;
-                }
-
-                // ディレイをかけてから次に行く
-                await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
-
-                // ターン終了ステートに変更
-                m_battleModel.BattleState = BattleModel.BattleStateType.TurnEnd;
-
+                await OnTechniqueExecute();
                 break;
             case BattleModel.BattleExecuteType.Change:
                 break;
@@ -263,13 +234,14 @@ public class BattleController : MonoBehaviour
 
                 // 逃げれるか逃げれないか
                 // todo 今は確定で逃げれる
-
                 m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
                 await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_escapeMessage);
                 await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
                 m_battleModel.BattleState = BattleModel.BattleStateType.Result;
-                break;
+                return;
         }
+        // ターン終了ステートに変更
+        m_battleModel.BattleState = BattleModel.BattleStateType.TurnEnd;
     }
 
     /// <summary>
@@ -295,6 +267,23 @@ public class BattleController : MonoBehaviour
 
             m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
             m_faintingMessage = string.Format(m_faintingMessage, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name);
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_faintingMessage);
+            await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+            m_battleModel.BattleState = BattleModel.BattleStateType.Result;
+            return;
+        }
+
+        // プレイヤータマモンが瀕死になったかどうか
+        if (m_battleModel.IsPlayerFainting())
+        {
+            m_battleModel.BattleTurnEndState = BattleModel.BattleTurnEndType.Lose;
+
+            // 戦闘不能アニメーション再生
+            await m_battleTamamonView.OnDownAnimation(true);
+
+            m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+            m_faintingMessage = string.Format(m_faintingMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
             await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_faintingMessage);
             await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
@@ -342,6 +331,7 @@ public class BattleController : MonoBehaviour
         switch (m_battleModel.BattleTurnEndState)
         {
             case BattleModel.BattleTurnEndType.Win:
+
                 int exp = 30;
                 m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
                 m_getExpMessage = string.Format(m_getExpMessage, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name, exp);
@@ -357,6 +347,11 @@ public class BattleController : MonoBehaviour
                 await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
                 break;
             case BattleModel.BattleTurnEndType.Lose:
+
+                m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                m_loseMessage = string.Format(m_loseMessage, m_playerName);
+                await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_loseMessage);
+                await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
                 break;
             case BattleModel.BattleTurnEndType.EnemyDown:
                 break;
@@ -366,6 +361,169 @@ public class BattleController : MonoBehaviour
                 break;
         }
         await SceneManager.Instance.UnLoadSceneAsync("Battle");
+    }
+
+    /// <summary>
+    /// 技選択時実行コールバック
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask OnTechniqueExecute()
+    {
+
+        // 素早さチェック
+        bool isPlayer = true;
+        if (m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.Speed > m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.Speed)
+        {
+            isPlayer = false;
+        }
+        else if (m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.Speed < m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.Speed)
+        {
+            isPlayer = true;
+        }
+        else if (m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.Speed == m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.Speed)
+        {
+            isPlayer = UnityEngine.Random.Range(0, 2) == 0 ? false : true;
+        }
+
+        if (isPlayer)
+        {
+            m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList[m_commandIndex].TechniqueData.Name}！");
+
+            m_battleUIView.UpdateEnemyHpBar(m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(m_commandIndex, true));
+            m_battleModel.EnemyStatusData.UpdateNowHP(m_battleModel.GetDamageValue(m_commandIndex, true));
+
+            await UniTask.WaitWhile(() => m_battleUIView.IsEnemyHpBarAnimation);
+
+            // タイプ相性テキスト
+            switch (m_battleModel.WeaknessTypeState)
+            {
+                case BattleModel.WeaknessType.None:
+                    break;
+                case BattleModel.WeaknessType.Effective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_effectiveMessage);
+                    break;
+                case BattleModel.WeaknessType.NotEffective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_notEffectiveMessage);
+                    break;
+                case BattleModel.WeaknessType.DontAffective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_dontAffectiveMessage);
+                    break;
+            }
+
+            if (m_battleModel.IsEnemyFainting())
+            {
+                // ディレイをかけてから次に行く
+                await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+                // ターン終了ステートに変更
+                m_battleModel.BattleState = BattleModel.BattleStateType.TurnEnd;
+                return;
+            }
+
+            //瀕死になっていなければエネミーの行動
+            // ディレイをかけてから次に行く
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
+            m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[0].TechniqueData.Name}！");
+
+            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(0, false));
+            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(0, false));
+
+            await UniTask.WaitWhile(() => m_battleUIView.IsPlayerHpBarAnimation);
+
+            // タイプ相性テキスト
+            switch (m_battleModel.WeaknessTypeState)
+            {
+                case BattleModel.WeaknessType.None:
+                    break;
+                case BattleModel.WeaknessType.Effective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_effectiveMessage);
+                    break;
+                case BattleModel.WeaknessType.NotEffective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_notEffectiveMessage);
+                    break;
+                case BattleModel.WeaknessType.DontAffective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_dontAffectiveMessage);
+                    break;
+            }
+        }
+        else
+        {
+            m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[0].TechniqueData.Name}！");
+
+            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(0, false));
+            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(0, false));
+
+            await UniTask.WaitWhile(() => m_battleUIView.IsPlayerHpBarAnimation);
+
+            // タイプ相性テキスト
+            switch (m_battleModel.WeaknessTypeState)
+            {
+                case BattleModel.WeaknessType.None:
+                    break;
+                case BattleModel.WeaknessType.Effective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_effectiveMessage);
+                    break;
+                case BattleModel.WeaknessType.NotEffective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_notEffectiveMessage);
+                    break;
+                case BattleModel.WeaknessType.DontAffective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_dontAffectiveMessage);
+                    break;
+            }
+
+            if (m_battleModel.IsPlayerFainting())
+            {
+                // ディレイをかけてから次に行く
+                await UniTask.Delay(TimeSpan.FromSeconds(1f));
+                // ターン終了ステートに変更
+                m_battleModel.BattleState = BattleModel.BattleStateType.TurnEnd;
+                return;
+            }
+
+            // 瀕死になっていなければプレイヤーの行動
+            // ディレイをかけてから次に行く
+            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList[m_commandIndex].TechniqueData.Name}！");
+
+            m_battleUIView.UpdateEnemyHpBar(m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(m_commandIndex, true));
+            m_battleModel.EnemyStatusData.UpdateNowHP(m_battleModel.GetDamageValue(m_commandIndex, true));
+
+            await UniTask.WaitWhile(() => m_battleUIView.IsEnemyHpBarAnimation);
+
+            // タイプ相性テキスト
+            switch (m_battleModel.WeaknessTypeState)
+            {
+                case BattleModel.WeaknessType.None:
+                    break;
+                case BattleModel.WeaknessType.Effective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_effectiveMessage);
+                    break;
+                case BattleModel.WeaknessType.NotEffective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_notEffectiveMessage);
+                    break;
+                case BattleModel.WeaknessType.DontAffective:
+                    m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                    await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_dontAffectiveMessage);
+                    break;
+            }
+        }
+
+        // ディレイをかけてから次に行く
+        await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
     }
 
     /// <summary>

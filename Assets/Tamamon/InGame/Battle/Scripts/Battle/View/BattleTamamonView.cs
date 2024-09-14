@@ -142,7 +142,7 @@ public class BattleTamamonView : MonoBehaviour
 
         if (isPlayer)
         {
-            m_playerTamamonImage.transform.DOLocalMove(new Vector3(m_enemyTamamonImage.transform.localPosition.x, TamamonDownEndLocalPositionY, 0), 0.3f).OnComplete(() => { m_isAnimation = false; });
+            m_playerTamamonImage.transform.DOLocalMove(new Vector3(m_playerTamamonImage.transform.localPosition.x, TamamonDownEndLocalPositionY, 0), 0.3f).OnComplete(() => { m_isAnimation = false; });
         }
         else
         {
