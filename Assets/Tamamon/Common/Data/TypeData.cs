@@ -30,6 +30,28 @@ public static class TypeData
         Fairy,    // —d
     }
 
+    public static Dictionary<Type, string> TypeNameDictionary = new Dictionary<Type, string>()
+    {
+        {Type.Normal, "ƒm[ƒ}ƒ‹" },
+        {Type.Fire, "‰Š" },
+        {Type.Water, "…" },
+        {Type.Electric, "“d‹C" },
+        {Type.Grass, "‘" },
+        {Type.Ice, "•X" },
+        {Type.Fighting, "Ši“¬" },
+        {Type.Poison, "“Å" },
+        {Type.Ground, "’n–Ê" },
+        {Type.Flying, "”òs" },
+        {Type.Psychic, "’´" },
+        {Type.Bug, "’" },
+        {Type.Rock, "Šâ" },
+        {Type.Ghost, "—ì" },
+        {Type.Dragon, "—³" },
+        {Type.Dark, "ˆ«" },
+        {Type.Steel, "|" },
+        {Type.Fairy, "—d" },
+    };
+
     /// <summary>
     /// Œø‰Ê”²ŒQî•ñ
     /// </summary>

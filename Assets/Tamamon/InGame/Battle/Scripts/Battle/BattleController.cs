@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using UniRx;
 using Tamamon.Framework;
 
 /// <summary>
@@ -23,8 +24,8 @@ public class BattleController : MonoBehaviour
 
     private BattleModel m_battleModel = default;
 
-    TamamonStatusData m_enemyTamamonData = new TamamonStatusData();
-    TamamonStatusData m_playerTamamonData = new TamamonStatusData();
+    private TamamonStatusData m_enemyTamamonData = new TamamonStatusData();
+    private TamamonStatusData m_playerTamamonData = new TamamonStatusData();
 
     // 仮データ変数
     private string m_encountMessage = "野生の {0} が現れた!";
@@ -51,7 +52,7 @@ public class BattleController : MonoBehaviour
         SoundManager.Instance.PlayBGM(SoundManager.BGM_Type.Battle);
 
         // ステート変更時のコールバック登録
-        m_battleModel.OnInitialize();
+        m_battleModel.OnStateExecute();
         m_battleModel.SetCallbackDictionary(BattleModel.BattleStateType.Encount, async () => await OnEncount());
         m_battleModel.SetCallbackDictionary(BattleModel.BattleStateType.ActionSelect, async () => await OnActionSelect());
         m_battleModel.SetCallbackDictionary(BattleModel.BattleStateType.TechniqueSelect, async () => await OnTechniqueSelect());
@@ -70,6 +71,17 @@ public class BattleController : MonoBehaviour
         m_battleUIView.ShowPlayerUI(m_playerTamamonData.TamamonStatusDataInfo.Name, m_playerTamamonData.TamamonStatusDataInfo.Sex, m_playerTamamonData.TamamonStatusDataInfo.Level, m_playerTamamonData.TamamonStatusDataInfo.Exp, m_playerTamamonData.TamamonStatusDataInfo.NowExp, m_playerTamamonData.TamamonStatusValueDataInfo.HP, m_playerTamamonData.TamamonStatusDataInfo.NowHP);
         m_battleTextWindowView.BattleUIMessageTextWindow.OnInitialize();
         m_battleTamamonView.OnInitialize(enemyId, playerId);
+
+        this
+            .ObserveEveryValueChanged(_ => m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex)
+            .Subscribe(_ =>
+            {
+                if (m_playerTamamonData.TamamonStatusDataInfo.TechniqueList.Count >= m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex)
+                {
+                    var data = m_playerTamamonData.TamamonStatusDataInfo.TechniqueList[m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex];
+                    m_battleTextWindowView.BattleUITechniqueInfoTextWindow.ShowText(data.TechniquePP, data.TechniqueNowPP, TypeData.TypeNameDictionary[data.TechniqueData.Type]);
+                }
+            });
 
         // エンカウントステートに変更
         m_battleModel.BattleState = BattleModel.BattleStateType.Encount;
@@ -126,7 +138,7 @@ public class BattleController : MonoBehaviour
         m_battleTextWindowView.BattleUIActionTextWindow.OnInitialize(m_actionCommandList);
 
         int index = await OnInput(m_battleTextWindowView.BattleUIActionTextWindow);
-
+       
         // ステートを変更
         if (index == 0)
         {
@@ -165,12 +177,10 @@ public class BattleController : MonoBehaviour
         List<string> commandNameList = new List<string>();
         foreach (var data in m_playerTamamonData.TamamonStatusDataInfo.TechniqueList)
         {
-            TechniqueData.TechniqueDataInfomation techniqueDataInfomation = new TechniqueData().GetData(data.TechniqueId);
-            commandNameList.Add(techniqueDataInfomation.Name);
+            commandNameList.Add(data.TechniqueData.Name);
         }
 
         m_battleTextWindowView.BattleUITechniqueTextWindow.OnInitialize(commandNameList);
-        m_battleTextWindowView.BattleUITechniqueInfoTextWindow.ShowText(35, 2, "ノーマル");
 
         int index = await OnInput(m_battleTextWindowView.BattleUITechniqueTextWindow, true);
 

@@ -10,7 +10,7 @@ public class BattleModel
 {
     private ReactiveProperty<BattleStateType> m_battleState = new();
     public BattleStateType BattleState { get => m_battleState.Value; set => m_battleState.Value = value; }
-    public IObservable<BattleStateType> BattleStateObservar => m_battleState;
+    public IObservable<BattleStateType> BattleStateObserver => m_battleState;
 
     private Dictionary<BattleStateType, System.Action> m_stateCallbackDictionary = new Dictionary<BattleStateType, System.Action>();
 
@@ -71,11 +71,10 @@ public class BattleModel
     }
 
     /// <summary>
-    /// 初期化
+    /// ステート切り替え時に呼ばれるコールバックを登録
     /// </summary>
-    public void OnInitialize()
+    public void OnStateExecute()
     {
-        // ステートの監視
         m_battleState.Skip(1).Subscribe(state => OnExecute(state));
     }
 

@@ -22,6 +22,7 @@ public class BattleUICommandTextWindow : CommandWindowBase
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
+                m_selectIndex = CloseIndex;
                 return true;
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))

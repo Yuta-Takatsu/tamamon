@@ -120,6 +120,9 @@ public class TamamonStatusData
         // 技ID
         public int TechniqueId;
 
+        // 技マスター
+        public TechniqueData.TechniqueDataInfomation TechniqueData;
+
         // PP上昇回数
         public int TechniquePPUpCount;
 
@@ -374,10 +377,11 @@ public class TamamonStatusData
 
         TechniqueData techniqueData = new TechniqueData();
         TamamonTechniqueDataInformation tamamonTechniqueDataInformation = new TamamonTechniqueDataInformation();
-        tamamonTechniqueDataInformation.TechniqueId = techniqueData.GetData(id).Id;
+        tamamonTechniqueDataInformation.TechniqueData = techniqueData.GetData(id);
+        tamamonTechniqueDataInformation.TechniqueId = tamamonTechniqueDataInformation.TechniqueData.Id;
         tamamonTechniqueDataInformation.TechniquePPUpCount = 0;
-        tamamonTechniqueDataInformation.TechniquePP = techniqueData.GetData(id).PP;
-        tamamonTechniqueDataInformation.TechniqueNowPP = techniqueData.GetData(id).PP;
+        tamamonTechniqueDataInformation.TechniquePP = tamamonTechniqueDataInformation.TechniqueData.PP;
+        tamamonTechniqueDataInformation.TechniqueNowPP = tamamonTechniqueDataInformation.TechniqueData.PP;
 
         if (m_tamamonStatusDataInfo.TechniqueList.Count <= index)
         {
