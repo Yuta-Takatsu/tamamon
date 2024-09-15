@@ -92,6 +92,17 @@ public class TechniqueData
             techniqueDataInfomation.Type = TypeData.Type.Ground;
             techniqueDataInfomation.TechniqueType = TechniqueTypeInfomation.Physics;
         }
+        else if (id == 6)
+        {
+            techniqueDataInfomation.Id = id;
+            techniqueDataInfomation.PP = 20;
+            techniqueDataInfomation.Power = 70;
+            techniqueDataInfomation.Accuracy = 100;
+            techniqueDataInfomation.Name = "きりさく";
+            techniqueDataInfomation.DescText = "ツメや カマなどで 相手を 切り裂いて 攻撃する。\n急所に 当たりやすい。";
+            techniqueDataInfomation.Type = TypeData.Type.Normal;
+            techniqueDataInfomation.TechniqueType = TechniqueTypeInfomation.Physics;
+        }
 
         return techniqueDataInfomation;
     }

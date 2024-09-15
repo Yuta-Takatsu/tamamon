@@ -82,7 +82,7 @@ public class BattleController : MonoBehaviour
 
         // タマモン情報初期化  
         TamamonStatusData enemyData_1 = new TamamonStatusData();
-        enemyData_1.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
+        enemyData_1.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5, 6);
         m_battleModel.AddEnemyList(enemyData_1);
 
         TamamonStatusData playerData_1 = new TamamonStatusData();
@@ -457,6 +457,10 @@ public class BattleController : MonoBehaviour
             isPlayer = UnityEngine.Random.Range(0, 100) <= 50 ? false : true;
         }
 
+        // ランダムに技を選択
+        UnityEngine.Random.InitState(DateTime.Now.Millisecond);
+        int index = UnityEngine.Random.Range(0, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList.Count);
+
         if (isPlayer)
         {
             m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
@@ -499,10 +503,11 @@ public class BattleController : MonoBehaviour
             // ディレイをかけてから次に行く
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
             m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[0].TechniqueData.Name}！");
 
-            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(0, false));
-            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(0, false));
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Name}！");
+
+            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(index, false));
+            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(index, false));
 
             await UniTask.WaitWhile(() => m_battleUIView.IsPlayerHpBarAnimation);
 
@@ -528,10 +533,10 @@ public class BattleController : MonoBehaviour
         else
         {
             m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[0].TechniqueData.Name}！");
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Name}！");
 
-            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(0, false));
-            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(0, false));
+            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(index, false));
+            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(index, false));
 
             await UniTask.WaitWhile(() => m_battleUIView.IsPlayerHpBarAnimation);
 
