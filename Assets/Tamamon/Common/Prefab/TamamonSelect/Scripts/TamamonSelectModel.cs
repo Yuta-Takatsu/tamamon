@@ -4,6 +4,9 @@ using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
+/// <summary>
+/// タマモン選択画面モデルクラス
+/// </summary>
 public class TamamonSelectModel
 {
     public int SelectIndex { get; set; } = 0;

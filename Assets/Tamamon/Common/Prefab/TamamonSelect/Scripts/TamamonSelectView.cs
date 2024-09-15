@@ -1,4 +1,3 @@
-using System.Collections;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -6,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 
+/// <summary>
+/// タマモン選択画面ビュークラス
+/// </summary>
 public class TamamonSelectView : MonoBehaviour
 {
     [SerializeField]
@@ -17,12 +19,8 @@ public class TamamonSelectView : MonoBehaviour
     [SerializeField]
     private Image m_closeButtonFrame = default;
 
-    [SerializeField]
-    private TamamonSelectTextWindow m_tamamonSelectTextWindow = default;
-
     private List<TamamonSelectInfo> m_tamamonInfoObjectList = new List<TamamonSelectInfo>();
     public List<TamamonSelectInfo> TamamonInfoObjectList => m_tamamonInfoObjectList;
-
 
     /// <summary>
     /// 表示
