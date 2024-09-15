@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// キャラクター基底(見下ろし視点)
 /// </summary>
-public class TopDownCharacterBase : MonoBehaviour
+public partial class TopDownCharacterBase : MonoBehaviour
 {
 
     [SerializeField]

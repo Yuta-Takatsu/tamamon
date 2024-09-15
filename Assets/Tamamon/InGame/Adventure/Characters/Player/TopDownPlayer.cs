@@ -7,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public class TopDownPlayer : TopDownCharacterBase
 {
+    [SerializeField]
+    public TopDownPlayerController m_controller;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,25 +22,13 @@ public class TopDownPlayer : TopDownCharacterBase
     public override void OnInitialize()
     {
         base.OnInitialize();
+        m_controller = new TopDownPlayerController();
+        m_controller.OnInitialize(this);
     }
 
     // Update is called fixed once per frame
     void FixedUpdate()
 	{
-		if ( Input.GetKey(KeyCode.W) ) {
-            m_rigidbody2D.position += new Vector2(0,0.1f);
-		}
-
-        if ( Input.GetKey(KeyCode.A) ) {
-            m_rigidbody2D.position += new Vector2(-0.1f,0);
-		}
-
-        if ( Input.GetKey(KeyCode.S) ) {
-            m_rigidbody2D.position += new Vector2(0,-0.1f);
-		}
-
-        if ( Input.GetKey(KeyCode.D) ) {
-            m_rigidbody2D.position += new Vector2(0.1f,0);
-		}
+		m_controller.OnUpdate();
 	}
 }
