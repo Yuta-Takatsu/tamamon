@@ -66,12 +66,13 @@ public class TamamonSelectView : MonoBehaviour
 
         m_tamamonInfoObjectList.Add(m_firstTamamonInfo);
 
+        int index = 1;
         foreach (var data in tamamonStatusDataList.Skip(1))
         {
-            int index = 1;
+            int i = index;
             var tamamonInfo = Instantiate(m_tamamonInfo, m_tamamonInfo.transform.parent);
             tamamonInfo.OnInitialize(
-                index,
+                i,
                 data.TamamonStatusDataInfo.NickName,
                 data.TamamonStatusDataInfo.Level,
                 data.TamamonStatusDataInfo.Sex,
@@ -79,6 +80,30 @@ public class TamamonSelectView : MonoBehaviour
                 data.TamamonStatusDataInfo.NowHP);
 
             m_tamamonInfoObjectList.Add(tamamonInfo);
+            index++;
+        }
+
+        m_tamamonInfo.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 情報更新
+    /// </summary>
+    /// <param name="tamamonStatusDataList"></param>
+    public void UpdateStatusData(List<TamamonStatusData> tamamonStatusDataList)
+    {
+        int index = 0;
+        foreach (var data in tamamonStatusDataList)
+        {
+            int i = index;
+            m_tamamonInfoObjectList[i].OnInitialize(
+                i,
+                data.TamamonStatusDataInfo.NickName,
+                data.TamamonStatusDataInfo.Level,
+                data.TamamonStatusDataInfo.Sex,
+                data.TamamonStatusValueDataInfo.HP,
+                data.TamamonStatusDataInfo.NowHP);
+            index++;
         }
     }
 
@@ -95,7 +120,7 @@ public class TamamonSelectView : MonoBehaviour
         }
         else
         {
-            m_tamamonInfoObjectList[prevIndex].gameObject.SetActive(false);
+            m_tamamonInfoObjectList[prevIndex].SetFrame(false);
         }
 
         if (index >= m_tamamonInfoObjectList.Count)
@@ -104,7 +129,19 @@ public class TamamonSelectView : MonoBehaviour
         }
         else
         {
-            m_tamamonInfoObjectList[index].gameObject.SetActive(true);
+            m_tamamonInfoObjectList[index].SetFrame(true);
         }
+    }
+
+    /// <summary>
+    /// 生成したタマモン情報オブジェクトの削除
+    /// </summary>
+    public void OnTamamonInfoDestroy()
+    {
+        foreach (var obj in m_tamamonInfoObjectList)
+        {
+            Destroy(obj.gameObject);
+        }
+        m_tamamonInfoObjectList.Clear();
     }
 }

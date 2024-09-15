@@ -104,6 +104,7 @@ public class BattleController : MonoBehaviour
         m_battleUIView.ShowPlayerUI(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Sex, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Level, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Exp, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowExp, m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP);
         m_battleTextWindowView.BattleUIMessageTextWindow.OnInitialize();
         m_battleTamamonView.OnInitialize(enemyId, playerId);
+        m_tamamonSelectController.OnInitialize(m_battleModel.GetPlayerList());
 
         this
             .ObserveEveryValueChanged(_ => m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex)
@@ -332,11 +333,9 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnTamamonSelect()
     {
-        m_tamamonSelectController.OnInitialize(m_battleModel.GetPlayerList());
+        m_tamamonSelectController.UpdateData(m_battleModel.GetPlayerList());
 
         await m_tamamonSelectController.Show();
-
-        await m_tamamonSelectController.Hide();
 
         m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
     }
@@ -411,7 +410,6 @@ public class BattleController : MonoBehaviour
         {
             UnityEngine.Random.InitState(DateTime.Now.Millisecond);
             isPlayer = UnityEngine.Random.Range(0, 100) <= 50 ? false : true;
-            Debug.Log(isPlayer);
         }
 
         if (isPlayer)

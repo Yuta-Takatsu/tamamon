@@ -18,7 +18,7 @@ public class TamamonSelectModel
     /// “ü—Í‘Ò‹@
     /// </summary>
     /// <returns></returns>
-    public async UniTask OnInput()
+    public async UniTask OnInput(System.Action onCallback = null)
     {
         bool isDecision = false;
 
@@ -40,14 +40,18 @@ public class TamamonSelectModel
                         isDecision = true;
                         break;
                     }
+                    PrevSelectIndex = SelectIndex;
                     SelectIndex = MaxSelectIndex;
+                    onCallback?.Invoke();
                     break;
                 }
                 else if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
                     if (SelectIndex != 0 && SelectIndex != MaxSelectIndex)
                     {
+                        PrevSelectIndex = SelectIndex;
                         SelectIndex = 0;
+                        onCallback?.Invoke();
                     }
                     break;
                 }
@@ -55,7 +59,9 @@ public class TamamonSelectModel
                 {
                     if (SelectIndex == 0)
                     {
+                        PrevSelectIndex = SelectIndex;
                         SelectIndex = 1;
+                        onCallback?.Invoke();
                     }
                     break;
                 }
@@ -63,7 +69,9 @@ public class TamamonSelectModel
                 {
                     if (SelectIndex > 0)
                     {
-                        SelectIndex--; ;
+                        PrevSelectIndex = SelectIndex;
+                        SelectIndex--;
+                        onCallback?.Invoke();
                     }
                     break;
                 }
@@ -71,7 +79,9 @@ public class TamamonSelectModel
                 {
                     if (SelectIndex < MaxSelectIndex)
                     {
+                        PrevSelectIndex = SelectIndex;
                         SelectIndex++;
+                        onCallback?.Invoke();
                     }
                     break;
                 }
