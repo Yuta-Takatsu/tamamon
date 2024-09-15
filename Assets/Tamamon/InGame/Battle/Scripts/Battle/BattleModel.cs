@@ -230,7 +230,7 @@ public class BattleModel
                 if (enemyType == effectiveType)
                 {
                     m_weaknessTypeState = WeaknessType.Effective;
-                    weaknessBonus += 1f;
+                    weaknessBonus *= 2f;
                     break;
                 }
             }
@@ -241,7 +241,7 @@ public class BattleModel
                 if (enemyType == effectiveType)
                 {
                     m_weaknessTypeState = WeaknessType.NotEffective;
-                    weaknessBonus -= 0.5f;
+                    weaknessBonus *= 0.5f;
                     break;
                 }
             }

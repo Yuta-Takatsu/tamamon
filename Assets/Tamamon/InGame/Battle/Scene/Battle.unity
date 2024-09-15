@@ -6781,15 +6781,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2097332395129847484, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2097332395129847484, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2097332395558441064, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
       propertyPath: m_Name
       value: TamamonSelectObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097332395558441064, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2097332395558441065, guid: 9775ec99143215543b9d9b90537b2526, type: 3}
       propertyPath: m_Pivot.x

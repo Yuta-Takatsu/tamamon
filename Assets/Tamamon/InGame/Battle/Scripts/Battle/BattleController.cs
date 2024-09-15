@@ -336,10 +336,6 @@ public class BattleController : MonoBehaviour
 
         await m_tamamonSelectController.Show();
 
-        await m_tamamonSelectController.OnExecute();
-
-        await UniTask.WaitUntil(() => m_tamamonSelectController.IsHide);
-
         await m_tamamonSelectController.Hide();
 
         m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
