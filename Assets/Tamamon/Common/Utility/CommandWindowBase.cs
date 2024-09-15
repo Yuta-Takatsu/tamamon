@@ -15,10 +15,14 @@ public class CommandWindowBase : MonoBehaviour
     protected int m_selectIndex = 0;
     public int SelectIndex => m_selectIndex;
 
+    protected bool m_isEscape = false;
+    public bool IsEscape => m_isEscape;
+
     protected int m_commandNum = 0;
     protected CanvasGroup m_prevArrowUIObject = default;
 
-    protected readonly int CloseIndex = 100;
+    private Tween m_flashTween = default;
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -42,7 +46,10 @@ public class CommandWindowBase : MonoBehaviour
         foreach (var obj in m_arrowUIObjectList)
         {
             obj.gameObject.SetActive(false);
-            PlayFlashAnimation(obj);
+            if (m_flashTween == null)
+            {
+                PlayFlashAnimation(obj);
+            }
         }
 
         ShowArrowUI(0);
@@ -56,12 +63,12 @@ public class CommandWindowBase : MonoBehaviour
     {
         if (index >= m_commandNum || index < 0) return;
 
-        m_arrowUIObjectList[index].gameObject.SetActive(true);
-
         if (m_prevArrowUIObject != null)
         {
             m_prevArrowUIObject.gameObject.SetActive(false);
         }
+
+        m_arrowUIObjectList[index].gameObject.SetActive(true);
 
         m_prevArrowUIObject = m_arrowUIObjectList[index];
         m_selectIndex = index;
@@ -95,8 +102,13 @@ public class CommandWindowBase : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 点滅アニメーション
+    /// </summary>
+    /// <param name="obj"></param>
     public virtual void PlayFlashAnimation(CanvasGroup obj)
     {
-        obj.DOFade(0.0f, 1f).SetEase(Ease.InCubic).SetLoops(-1, LoopType.Restart).SetLink(gameObject);
+        obj.alpha = 1.0f;
+        m_flashTween = obj.DOFade(0.0f, 1f).SetEase(Ease.InCubic).SetLoops(-1, LoopType.Restart).SetLink(gameObject);
     }
 }

@@ -38,6 +38,7 @@ public class BattleModel
     /// </summary>
     public enum BattleExecuteType
     {
+        None,
         Technique, // 技使用
         Change,    // 入れ替え
         Item,      // アイテム使用
@@ -52,10 +53,23 @@ public class BattleModel
     /// </summary>
     public enum BattleTurnEndType
     {
-        Win,
-        Lose,
+        None,
         EnemyDown,
         PlayerDown,
+    }
+
+    private BattleEndType m_battleEndState = default;
+    public BattleEndType BattleEndState { get => m_battleEndState; set => m_battleEndState = value; }
+
+    /// <summary>
+    /// バトル終了時ステート
+    /// </summary>
+    public enum BattleEndType
+    {
+        None,
+        Win,
+        Lose,
+        Escape,
     }
 
     private BattleEventType m_battleEventState = default;
@@ -66,9 +80,33 @@ public class BattleModel
     /// </summary>
     public enum BattleEventType
     {
+        None,
         Trainer,
         Wild,
     }
+
+    private WeaknessType m_weaknessTypeState = default;
+    public WeaknessType WeaknessTypeState => m_weaknessTypeState;
+    /// <summary>
+    /// タイプ相性
+    /// </summary>
+    public enum WeaknessType
+    {
+        None,
+        Effective,
+        NotEffective,
+        DontAffective,
+    }
+
+    private TamamonStatusData m_enemyStatusData = default;
+    public TamamonStatusData EnemyStatusData { get => m_enemyStatusData; set => m_enemyStatusData = value; }
+
+    private TamamonStatusData m_playerStatusData = default;
+    public TamamonStatusData PlayerStatusData { get => m_playerStatusData; set => m_playerStatusData = value; }
+
+    private List<TamamonStatusData> m_enemyStatusDataList = new List<TamamonStatusData>();
+
+    private List<TamamonStatusData> m_playerStatusDataList = new List<TamamonStatusData>();
 
     /// <summary>
     /// ステート切り替え時に呼ばれるコールバックを登録
@@ -89,10 +127,205 @@ public class BattleModel
     }
 
     /// <summary>
+    /// エネミーの手持ちリストを取得
+    /// </summary>
+    /// <param name="list"></param>
+    public void SetEnemyList(List<TamamonStatusData> list)
+    {
+        m_enemyStatusDataList = list;
+    }
+
+    /// <summary>
+    /// エネミーの手持ちを追加
+    /// </summary>
+    /// <param name="data"></param>
+    public void AddEnemyList(TamamonStatusData data)
+    {
+        m_enemyStatusDataList.Add(data);
+    }
+
+    /// <summary>
+    /// エネミーの手持ちリストを返す
+    /// </summary>
+    /// <returns></returns>
+    public List<TamamonStatusData> GetEnemyList()
+    {
+        return m_enemyStatusDataList;
+    }
+
+    /// <summary>
+    /// プレイヤーの手持ちリストを取得
+    /// </summary>
+    /// <param name="list"></param>
+    public void SetPlayerList(List<TamamonStatusData> list)
+    {
+        m_playerStatusDataList = list;
+    }
+
+    /// <summary>
+    /// プレイヤーの手持ちを追加
+    /// </summary>
+    /// <param name="data"></param>
+    public void AddPlayerList(TamamonStatusData data)
+    {
+        m_playerStatusDataList.Add(data);
+    }
+
+    /// <summary>
+    /// プレイヤーの手持ちリストを返す
+    /// </summary>
+    /// <returns></returns>
+    public List<TamamonStatusData> GetPlayerList()
+    {
+        return m_playerStatusDataList;
+    }
+
+    /// <summary>
+    /// ダメージ計算をしてその値を返す
+    /// </summary>
+    /// <returns></returns>
+    public int GetDamageValue(int index,bool isPlayer)
+    {
+        TamamonStatusData attackTamamon = m_playerStatusData;
+        TamamonStatusData defenseTamamon = m_enemyStatusData;
+        if (isPlayer)
+        {
+             attackTamamon = m_playerStatusData;
+             defenseTamamon = m_enemyStatusData;
+        }
+        else
+        {
+             attackTamamon = m_enemyStatusData;
+             defenseTamamon = m_playerStatusData;
+        }
+
+        // 仮
+        // 威力 * 0.8 * タイプ一致ボーナス * 相性
+        int power = attackTamamon.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Power;
+        float adjustValue = 0.8f;
+        float typeBonus = 1.0f;
+        float weaknessBonus = 1.0f;
+
+        // 使用技タイプ
+        TypeData.Type techniqueType = attackTamamon.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Type;
+
+        m_weaknessTypeState = WeaknessType.None;
+
+        // タイプ相性計算
+        foreach (var enemyType in defenseTamamon.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
+        {
+            // 無効
+            foreach (var effectiveType in TypeData.DontAffectDictionary[techniqueType])
+            {
+                if (enemyType == effectiveType)
+                {
+                    m_weaknessTypeState = WeaknessType.DontAffective;
+                    return 0;
+                }
+            }
+
+            // 抜群
+            foreach (var effectiveType in TypeData.EffectiveDictionary[techniqueType])
+            {
+                if (enemyType == effectiveType)
+                {
+                    m_weaknessTypeState = WeaknessType.Effective;
+                    weaknessBonus *= 2f;
+                    break;
+                }
+            }
+
+            //いまひとつ
+            foreach (var effectiveType in TypeData.NotEffectiveDictionary[techniqueType])
+            {
+                if (enemyType == effectiveType)
+                {
+                    m_weaknessTypeState = WeaknessType.NotEffective;
+                    weaknessBonus *= 0.5f;
+                    break;
+                }
+            }
+        }
+
+        // タイプ一致ボーナス計算
+        foreach (var playerType in attackTamamon.TamamonStatusDataInfo.tamamonDataInfomation.TypeList)
+        {
+            if (playerType == techniqueType)
+            {
+                typeBonus = 1.5f;
+            }
+        }
+        return (int)(power * adjustValue * typeBonus * weaknessBonus);
+    }
+
+    /// <summary>
+    /// 瀕死のエネミータマモンがいるか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsEnemyFainting()
+    {
+        return m_enemyStatusData.TamamonStatusDataInfo.NowHP <= 0;
+    }
+
+    /// <summary>
+    /// 瀕死のプレイヤータマモンがいるか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsPlayerFainting()
+    {
+        return m_playerStatusData.TamamonStatusDataInfo.NowHP <= 0;
+    }
+
+    /// <summary>
+    /// 状態異常のタマモンがいるか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsStatusAilment()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// 拘束されているかどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsBind()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// 天候が変わっているかどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsWeather()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// フィールドが変わっているかどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsField()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// 設置物があるかどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsInstallation()
+    {
+        return false;
+    }
+
+    /// <summary>
     /// 実行
     /// </summary>
     /// <param name="state"></param>
-    public void OnExecute(BattleStateType state)
+    private void OnExecute(BattleStateType state)
     {
         m_stateCallbackDictionary[state]?.Invoke();
     }

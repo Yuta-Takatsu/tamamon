@@ -10,6 +10,7 @@ public class TamamonSelectTextWindow : CommandWindowBase
     /// <returns></returns>
     public override async UniTask<bool> SelectCommand()
     {
+        m_isEscape = false;
         await UniTask.WaitUntil(() => Input.anyKeyDown);
 
         foreach (KeyCode code in Enum.GetValues(typeof(KeyCode)))
@@ -20,6 +21,7 @@ public class TamamonSelectTextWindow : CommandWindowBase
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
+                m_isEscape = true;
                 return true;
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
