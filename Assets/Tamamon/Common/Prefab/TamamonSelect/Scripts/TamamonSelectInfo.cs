@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.U2D;
 using TMPro;
 
 public class TamamonSelectInfo : MonoBehaviour
@@ -24,17 +25,21 @@ public class TamamonSelectInfo : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI m_hpText = default;
 
+    [SerializeField]
+    private SpriteAtlas m_tamamonSpriteAtlas = default;
+
     /// <summary>
     /// èâä˙âª
     /// </summary>
-    /// <param name="index"></param>
+    /// <param name="id"></param>
     /// <param name="name"></param>
     /// <param name="level"></param>
     /// <param name="sexType"></param>
     /// <param name="maxHP"></param>
     /// <param name="nowHP"></param>
-    public void OnInitialize(int index, string name, int level, TamamonData.SexType sexType, int maxHP, int nowHP)
+    public void OnInitialize(int id, string name, int level, TamamonData.SexType sexType, int maxHP, int nowHP)
     {
+        m_iconImage.sprite = m_tamamonSpriteAtlas.GetSprite($"tamamon_{id}");
         m_nameText.text = name;
         m_levelText.text = $"Lv:{level}";
 

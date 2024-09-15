@@ -120,6 +120,7 @@ MonoBehaviour:
   m_levelText: {fileID: 2097332395874972044}
   m_sexText: {fileID: 2097332396566460356}
   m_hpText: {fileID: 2097332396108950253}
+  m_tamamonSpriteAtlas: {fileID: 100100200, guid: ba188cb09a9d37c4eb76e16fc091a138, type: 3}
 --- !u!1 &2097332395545571918
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_tamamonSelectView: {fileID: 836560959}
+  m_tamamonSelectTextWindow: {fileID: 9048443352416885314}
 --- !u!114 &836560959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,7 +268,6 @@ MonoBehaviour:
   m_firstTamamonInfo: {fileID: 598901252}
   m_tamamonInfo: {fileID: 793822953}
   m_closeButtonFrame: {fileID: 2097332396780325434}
-  m_tamamonSelectTextWindow: {fileID: 0}
 --- !u!1 &2097332395567584627
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,8 +381,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -15}
-  m_SizeDelta: {x: -40, y: -30}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -100, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2097332395671980994
 CanvasRenderer:
@@ -438,8 +439,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1281,7 +1282,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d75d99ab7ab7ff24ea0c3a84898a4bef, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 79026bfb83639b54b80df6f03cce171d, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1361,7 +1362,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2010a4ec74f4b5b4ca3697518639ff6a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d313f5082a80a684fb7424e0bc6f29bf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1921,6 +1922,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1058819498267884585, guid: 70fe7686111f79742a3fc8889197d65f, type: 3}
   m_PrefabInstance: {fileID: 2466238153690911779}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9048443352416885314 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6893693545959296609, guid: 70fe7686111f79742a3fc8889197d65f, type: 3}
+  m_PrefabInstance: {fileID: 2466238153690911779}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2798715a5d118640a117a6d736e4e6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8984553883313032485
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1928,6 +1940,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8539656438122209741}
     m_Modifications:
+    - target: {fileID: 7040450665290855432, guid: 06a06a0e34a64b84083f584c6d32fd49, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7040450665698096022, guid: 06a06a0e34a64b84083f584c6d32fd49, type: 3}
       propertyPath: m_Name
       value: TamamonInfo

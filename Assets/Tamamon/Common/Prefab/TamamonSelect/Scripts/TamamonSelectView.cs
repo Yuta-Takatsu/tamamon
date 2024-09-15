@@ -55,7 +55,7 @@ public class TamamonSelectView : MonoBehaviour
     {
         var firstData = tamamonStatusDataList.First();
         m_firstTamamonInfo.OnInitialize(
-            0,
+            firstData.TamamonStatusDataInfo.Id,
             firstData.TamamonStatusDataInfo.NickName,
             firstData.TamamonStatusDataInfo.Level,
             firstData.TamamonStatusDataInfo.Sex,
@@ -70,7 +70,7 @@ public class TamamonSelectView : MonoBehaviour
             int i = index;
             var tamamonInfo = Instantiate(m_tamamonInfo, m_tamamonInfo.transform.parent);
             tamamonInfo.OnInitialize(
-                i,
+                data.TamamonStatusDataInfo.Id,
                 data.TamamonStatusDataInfo.NickName,
                 data.TamamonStatusDataInfo.Level,
                 data.TamamonStatusDataInfo.Sex,
@@ -95,7 +95,7 @@ public class TamamonSelectView : MonoBehaviour
         {
             int i = index;
             m_tamamonInfoObjectList[i].OnInitialize(
-                i,
+                data.TamamonStatusDataInfo.Id,
                 data.TamamonStatusDataInfo.NickName,
                 data.TamamonStatusDataInfo.Level,
                 data.TamamonStatusDataInfo.Sex,

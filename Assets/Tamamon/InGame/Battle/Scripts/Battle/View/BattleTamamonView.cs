@@ -21,7 +21,7 @@ public class BattleTamamonView : MonoBehaviour
     private readonly float EnemyStartLocalPositionX = -1350f;
     private readonly float EnemyEndLocalPositionX = 350f;
 
-    private readonly float TamamonDownEndLocalPositionY = -512f;
+    private readonly float TamamonDownEndLocalPositionY = -768f;
 
     private bool m_isAnimation = false;
     public bool IsAnimation => m_isAnimation;

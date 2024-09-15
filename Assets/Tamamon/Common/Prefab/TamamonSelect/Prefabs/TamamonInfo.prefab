@@ -110,7 +110,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2010a4ec74f4b5b4ca3697518639ff6a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d313f5082a80a684fb7424e0bc6f29bf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -311,6 +311,7 @@ MonoBehaviour:
   m_levelText: {fileID: 7040450666605330216}
   m_sexText: {fileID: 7040450665796390170}
   m_hpText: {fileID: 7040450665573482269}
+  m_tamamonSpriteAtlas: {fileID: 100100200, guid: ba188cb09a9d37c4eb76e16fc091a138, type: 3}
 --- !u!1 &7040450665796390168
 GameObject:
   m_ObjectHideFlags: 0
