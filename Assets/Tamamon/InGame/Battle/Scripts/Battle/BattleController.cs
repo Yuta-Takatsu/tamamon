@@ -87,9 +87,9 @@ public class BattleController : MonoBehaviour
         playerData_1.OnInitialize(playerId, TamamonData.SexType.Female, 7, 1, 1, 2, 3);
         m_battleModel.AddPlayerList(playerData_1);
 
-        TamamonStatusData playerData_2 = new TamamonStatusData();
-        playerData_2.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
-        m_battleModel.AddPlayerList(playerData_2);
+        //TamamonStatusData playerData_2 = new TamamonStatusData();
+        //playerData_2.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
+        //m_battleModel.AddPlayerList(playerData_2);
 
         // éËéùÇøÇÃêî
         m_enemyCount = m_battleModel.GetEnemyList().Count;
