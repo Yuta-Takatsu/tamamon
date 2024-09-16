@@ -33,16 +33,18 @@ public class BattleModel
     private BattleExecuteType m_battleExecuteState = default;
     public BattleExecuteType BattleExecuteState { get => m_battleExecuteState; set => m_battleExecuteState = value; }
 
+    private Dictionary<BattleExecuteType, System.Action> m_enemyBattleStateCallbackDictionary = new Dictionary<BattleExecuteType, System.Action>();
+    private Dictionary<BattleExecuteType, System.Action> m_playerBattleStateCallbackDictionary = new Dictionary<BattleExecuteType, System.Action>();
     /// <summary>
     /// 戦闘行動ステート
     /// </summary>
     public enum BattleExecuteType
     {
-        None,
-        Technique, // 技使用
-        Change,    // 入れ替え
-        Item,      // アイテム使用
-        Escape,    // 逃げる
+        None = 0,
+        Technique = 1, // 技使用
+        Item = 2,      // アイテム使用
+        Change = 3,    // 入れ替え
+        Escape = 4,    // 逃げる
     }
 
     private BattleTurnEndType m_battleTurnEndState = default;
@@ -56,6 +58,7 @@ public class BattleModel
         None,
         EnemyDown,
         PlayerDown,
+        AllDown,
     }
 
     private BattleEndType m_battleEndState = default;
@@ -124,6 +127,26 @@ public class BattleModel
     public void SetCallbackDictionary(BattleStateType state, System.Action onCallback)
     {
         m_stateCallbackDictionary.Add(state, onCallback);
+    }
+
+    /// <summary>
+    /// バトル実行コールバックをセット
+    /// </summary>
+    /// <param name="state"></param>
+    /// <param name="onCallback"></param>
+    public void SetEnemyBattleStateCallbackDictionary(BattleExecuteType state, System.Action onCallback)
+    {
+        m_enemyBattleStateCallbackDictionary.Add(state, onCallback);
+    }
+
+    /// <summary>
+    /// バトル実行コールバックをセット
+    /// </summary>
+    /// <param name="state"></param>
+    /// <param name="onCallback"></param>
+    public void SetPlayerBattleStateCallbackDictionary(BattleExecuteType state, System.Action onCallback)
+    {
+        m_playerBattleStateCallbackDictionary.Add(state, onCallback);
     }
 
     /// <summary>

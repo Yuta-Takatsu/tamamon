@@ -17,6 +17,8 @@ public class TamamonSelectModel
 
     public bool IsShow { get; set; } = false;
 
+    public bool IsEscape { get; set; } = true;
+
     /// <summary>
     /// “ü—Í‘Ò‹@
     /// </summary>
@@ -33,12 +35,14 @@ public class TamamonSelectModel
             {
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
+                    if (!IsEscape && SelectIndex == MaxSelectIndex) break;
+
                     isDecision = true;
                     break;
                 }
                 else if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    if (SelectIndex == MaxSelectIndex)
+                    if (IsEscape && SelectIndex == MaxSelectIndex)
                     {
                         isDecision = true;
                         break;

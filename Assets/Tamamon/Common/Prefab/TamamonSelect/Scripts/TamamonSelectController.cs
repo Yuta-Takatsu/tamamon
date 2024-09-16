@@ -76,7 +76,7 @@ public class TamamonSelectController : MonoBehaviour
     /// ï\é¶
     /// </summary>
     /// <returns></returns>
-    public async UniTask Show(System.Action onShowCallback = null, System.Action onHideCallback = null)
+    public async UniTask Show(bool isEscape = true, System.Action onShowCallback = null, System.Action onHideCallback = null)
     {
         m_tamamonSelectModel.IsShow = true;
         m_tamamonSelectModel.PrevSelectIndex = m_tamamonSelectModel.SelectIndex;
@@ -87,7 +87,7 @@ public class TamamonSelectController : MonoBehaviour
 
         await m_tamamonSelectView.Show(onShowCallback);
 
-        await OnExecute(onHideCallback);
+        await OnExecute(isEscape,onHideCallback);
     }
 
     /// <summary>
@@ -113,9 +113,11 @@ public class TamamonSelectController : MonoBehaviour
     /// ëÄçÏä÷òA
     /// </summary>
     /// <returns></returns>
-    public async UniTask OnExecute(System.Action onCallback = null)
+    public async UniTask OnExecute(bool isEscape = true, System.Action onCallback = null)
     {
         m_tamamonSelectState = TamamonSelectStateType.None;
+        m_tamamonSelectModel.IsEscape = isEscape;
+
         while (m_tamamonSelectState != TamamonSelectStateType.Change && m_tamamonSelectState != TamamonSelectStateType.Close)
         {
             // ì¸óÕë“ã@
