@@ -21,7 +21,7 @@ public class BattleTamamonView : MonoBehaviour
     private readonly float EnemyStartLocalPositionX = -1350f;
     private readonly float EnemyEndLocalPositionX = 350f;
 
-    private readonly float TamamonDownEndLocalPositionY = -512f;
+    private readonly float TamamonDownEndLocalPositionY = -768f;
 
     private bool m_isAnimation = false;
     public bool IsAnimation => m_isAnimation;
@@ -40,6 +40,24 @@ public class BattleTamamonView : MonoBehaviour
         // エンカウントアニメーション初期化
         OnEncountAnimationInitialize(false);
         OnEncountAnimationInitialize(true);
+    }
+
+    /// <summary>
+    /// エネミーイメージ更新
+    /// </summary>
+    /// <param name="index"></param>
+    public void UpdateEnemyImage(int index)
+    {
+        SetEnemyTamamonImage(index);
+    }
+
+    /// <summary>
+    /// プレイヤーイメージ更新
+    /// </summary>
+    /// <param name="index"></param>
+    public void UpdatePlayerImage(int index)
+    {
+        SetPlayerTamamonImage(index);
     }
 
     /// <summary>
@@ -126,6 +144,27 @@ public class BattleTamamonView : MonoBehaviour
         else
         {
             m_enemyTamamonImage.transform.DOLocalMove(new Vector3(EnemyEndLocalPositionX, m_enemyTamamonImage.transform.localPosition.y, 0), 2f).OnComplete(() => { m_isAnimation = false; });
+        }
+
+        await UniTask.WaitWhile(() => m_isAnimation);
+    }
+
+    /// <summary>
+    /// バトル戻る時アニメーション
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public async UniTask OnBackAnimation(bool isPlayer)
+    {
+        m_isAnimation = true;
+
+        if (isPlayer)
+        {
+            m_playerTamamonImage.transform.DOScale(new Vector3(0, 0, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
+        }
+        else
+        {
+            m_enemyTamamonImage.transform.DOScale(new Vector3(0, 0, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
         }
 
         await UniTask.WaitWhile(() => m_isAnimation);

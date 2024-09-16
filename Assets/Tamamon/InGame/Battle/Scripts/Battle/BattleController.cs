@@ -34,6 +34,8 @@ public class BattleController : MonoBehaviour
     // 仮データ変数
     private string m_encountMessage = "野生の {0} が現れた！";
 
+    private string m_changeMessage = "戻れ！{0}！";
+
     private string m_bringOutMessage = "行け ! {0}！";
 
     private string m_waitMessage = "{0} はどうする？";
@@ -80,16 +82,16 @@ public class BattleController : MonoBehaviour
 
         // タマモン情報初期化  
         TamamonStatusData enemyData_1 = new TamamonStatusData();
-        enemyData_1.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
+        enemyData_1.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5, 6);
         m_battleModel.AddEnemyList(enemyData_1);
 
         TamamonStatusData playerData_1 = new TamamonStatusData();
         playerData_1.OnInitialize(playerId, TamamonData.SexType.Female, 7, 1, 1, 2, 3);
         m_battleModel.AddPlayerList(playerData_1);
 
-        //TamamonStatusData playerData_2 = new TamamonStatusData();
-        //playerData_2.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
-        //m_battleModel.AddPlayerList(playerData_2);
+        TamamonStatusData playerData_2 = new TamamonStatusData();
+        playerData_2.OnInitialize(enemyId, TamamonData.SexType.Male, 5, 1, 5);
+        m_battleModel.AddPlayerList(playerData_2);
 
         // 手持ちの数
         m_enemyCount = m_battleModel.GetEnemyList().Count;
@@ -104,6 +106,18 @@ public class BattleController : MonoBehaviour
         m_battleUIView.ShowPlayerUI(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Sex, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Level, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Exp, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowExp, m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP);
         m_battleTextWindowView.BattleUIMessageTextWindow.OnInitialize();
         m_battleTamamonView.OnInitialize(enemyId, playerId);
+        m_tamamonSelectController.OnInitialize(m_battleModel.GetPlayerList(), TamamonSelectController.TamamonSelectViewType.Battle);
+
+        // 行動コマンド初期化
+        m_battleTextWindowView.BattleUIActionTextWindow.OnInitialize(m_actionCommandList);
+
+        // 技表記初期化
+        List<string> commandNameList = new List<string>();
+        foreach (var data in m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList)
+        {
+            commandNameList.Add(data.TechniqueData.Name);
+        }
+        m_battleTextWindowView.BattleUITechniqueTextWindow.OnInitialize(commandNameList, true);
 
         this
             .ObserveEveryValueChanged(_ => m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex)
@@ -131,8 +145,8 @@ public class BattleController : MonoBehaviour
 
         await m_battleTamamonView.PlayEncountEnemyAnimation();
 
-        m_encountMessage = string.Format(m_encountMessage, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name);
-        await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_encountMessage);
+        string encountMessage = string.Format(m_encountMessage, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name);
+        await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(encountMessage);
 
         await UniTask.WaitWhile(() => m_battleTextWindowView.BattleUIMessageTextWindow.IsMessageAnimation());
 
@@ -142,8 +156,8 @@ public class BattleController : MonoBehaviour
         m_battleTamamonView.PlayEncountPlayerAnimation().Forget();
 
         m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-        m_bringOutMessage = string.Format(m_bringOutMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
-        await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_bringOutMessage);
+        string bringOutMessage = string.Format(m_bringOutMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
+        await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(bringOutMessage);
 
         await UniTask.WaitWhile(() => m_battleTamamonView.IsAnimation);
         await UniTask.WaitWhile(() => m_battleTextWindowView.BattleUIMessageTextWindow.IsMessageAnimation());
@@ -165,30 +179,30 @@ public class BattleController : MonoBehaviour
         m_battleTextWindowView.BattleUITechniqueInfoTextWindow.gameObject.SetActive(false);
 
         m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-        m_waitMessage = string.Format(m_waitMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
-        m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageText(m_waitMessage);
+        string waitMessage = string.Format(m_waitMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
+        m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageText(waitMessage);
 
-        m_battleTextWindowView.BattleUIActionTextWindow.OnInitialize(m_actionCommandList);
+        m_battleTextWindowView.BattleUIActionTextWindow.ResetArrowActive();
 
-        int index = await OnInput(m_battleTextWindowView.BattleUIActionTextWindow);
-       
+        await m_battleTextWindowView.BattleUIActionTextWindow.SelectCommand();
+
         // ステートを変更
-        if (index == 0)
+        if (m_battleTextWindowView.BattleUIActionTextWindow.SelectIndex == 0)
         {
             m_battleModel.BattleExecuteState = BattleModel.BattleExecuteType.Technique;
             m_battleModel.BattleState = BattleModel.BattleStateType.TechniqueSelect;
         }
-        else if (index == 1)
+        else if (m_battleTextWindowView.BattleUIActionTextWindow.SelectIndex == 1)
         {
             m_battleModel.BattleExecuteState = BattleModel.BattleExecuteType.Item;
             m_battleModel.BattleState = BattleModel.BattleStateType.ItemSelect;
         }
-        else if (index == 2)
+        else if (m_battleTextWindowView.BattleUIActionTextWindow.SelectIndex == 2)
         {
             m_battleModel.BattleExecuteState = BattleModel.BattleExecuteType.Change;
             m_battleModel.BattleState = BattleModel.BattleStateType.TamamonSelect;
         }
-        else if (index == 3)
+        else if (m_battleTextWindowView.BattleUIActionTextWindow.SelectIndex == 3)
         {
             m_battleModel.BattleExecuteState = BattleModel.BattleExecuteType.Escape;
             m_battleModel.BattleState = BattleModel.BattleStateType.Execute;
@@ -208,14 +222,18 @@ public class BattleController : MonoBehaviour
         m_battleTextWindowView.BattleUITechniqueInfoTextWindow.gameObject.SetActive(true);
 
         List<string> commandNameList = new List<string>();
-        foreach (var data in m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList)
+        foreach (var statusData in m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList)
         {
-            commandNameList.Add(data.TechniqueData.Name);
+            commandNameList.Add(statusData.TechniqueData.Name);
         }
+        m_battleTextWindowView.BattleUITechniqueTextWindow.UpdateCommandText(commandNameList, true);
+        var data = m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList[m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex];
+        m_battleTextWindowView.BattleUITechniqueInfoTextWindow.ShowText(data.TechniquePP, data.TechniqueNowPP, TypeData.TypeNameDictionary[data.TechniqueData.Type]);
+        m_battleTextWindowView.BattleUITechniqueTextWindow.ResetArrowActive();
 
-        m_battleTextWindowView.BattleUITechniqueTextWindow.OnInitialize(commandNameList);
+        await m_battleTextWindowView.BattleUITechniqueTextWindow.SelectCommand();
 
-        m_commandIndex = await OnInput(m_battleTextWindowView.BattleUITechniqueTextWindow, true);
+        m_commandIndex = m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex;
 
         // ステートを変更
         if (m_battleTextWindowView.BattleUITechniqueTextWindow.IsEscape)
@@ -247,6 +265,25 @@ public class BattleController : MonoBehaviour
                 await OnTechniqueExecute();
                 break;
             case BattleModel.BattleExecuteType.Change:
+
+                m_battleTamamonView.OnBackAnimation(true).Forget();
+                m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                string changeMessage = string.Format(m_changeMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
+                await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(changeMessage);
+
+                // ディレイをかけてから次に行く
+                await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+
+                m_battleModel.PlayerStatusData = m_battleModel.GetPlayerList()[m_tamamonSelectController.GetSelectIndex()];
+                m_battleUIView.ShowPlayerUI(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Sex, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Level, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Exp, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowExp, m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP);
+                
+                m_battleTamamonView.UpdatePlayerImage(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Id);
+                m_battleTamamonView.PlayEncountPlayerAnimation().Forget();
+                m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
+                string bringOutMessage = string.Format(m_bringOutMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
+                await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(bringOutMessage);
+                await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
                 break;
             case BattleModel.BattleExecuteType.Item:
                 break;
@@ -288,8 +325,8 @@ public class BattleController : MonoBehaviour
             await m_battleTamamonView.OnDownAnimation(false);
 
             m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-            m_faintingMessage = string.Format(m_faintingMessage, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name);
-            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_faintingMessage);
+            string faintingMessage = string.Format(m_faintingMessage, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name);
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(faintingMessage);
             await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
             if (m_enemyCount < 1)
@@ -310,8 +347,8 @@ public class BattleController : MonoBehaviour
             await m_battleTamamonView.OnDownAnimation(true);
 
             m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-            m_faintingMessage = string.Format(m_faintingMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
-            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_faintingMessage);
+            string faintingMessage = string.Format(m_faintingMessage, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name);
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(faintingMessage);
             await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
             if (m_playerCount < 1)
@@ -332,13 +369,20 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnTamamonSelect()
     {
-        m_tamamonSelectController.OnInitialize(m_battleModel.GetPlayerList());
+        m_tamamonSelectController.UpdateData(m_battleModel.GetPlayerList());
 
         await m_tamamonSelectController.Show();
 
-        await m_tamamonSelectController.Hide();
-
-        m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
+        switch (m_tamamonSelectController.TamamonSelectState)
+        {
+            case TamamonSelectController.TamamonSelectStateType.Change:
+                m_battleModel.BattleExecuteState = BattleModel.BattleExecuteType.Change;
+                m_battleModel.BattleState = BattleModel.BattleStateType.Execute;
+                break;
+            case TamamonSelectController.TamamonSelectStateType.Close:
+                m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
+                break;
+        }
     }
 
     /// <summary>
@@ -377,8 +421,8 @@ public class BattleController : MonoBehaviour
             case BattleModel.BattleEndType.Lose:
 
                 m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-                m_loseMessage = string.Format(m_loseMessage, m_playerName);
-                await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_loseMessage);
+                string loseMessage = string.Format(m_loseMessage, m_playerName);
+                await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(loseMessage);
                 await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
                 break;
             case BattleModel.BattleEndType.Escape:
@@ -411,8 +455,11 @@ public class BattleController : MonoBehaviour
         {
             UnityEngine.Random.InitState(DateTime.Now.Millisecond);
             isPlayer = UnityEngine.Random.Range(0, 100) <= 50 ? false : true;
-            Debug.Log(isPlayer);
         }
+
+        // ランダムに技を選択
+        UnityEngine.Random.InitState(DateTime.Now.Millisecond);
+        int index = UnityEngine.Random.Range(0, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList.Count);
 
         if (isPlayer)
         {
@@ -456,10 +503,11 @@ public class BattleController : MonoBehaviour
             // ディレイをかけてから次に行く
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
             m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[0].TechniqueData.Name}！");
 
-            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(0, false));
-            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(0, false));
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Name}！");
+
+            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(index, false));
+            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(index, false));
 
             await UniTask.WaitWhile(() => m_battleUIView.IsPlayerHpBarAnimation);
 
@@ -485,10 +533,10 @@ public class BattleController : MonoBehaviour
         else
         {
             m_battleTextWindowView.BattleUIMessageTextWindow.ClearText();
-            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[0].TechniqueData.Name}！");
+            await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync($"{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name}の{m_battleModel.EnemyStatusData.TamamonStatusDataInfo.TechniqueList[index].TechniqueData.Name}！");
 
-            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(0, false));
-            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(0, false));
+            m_battleUIView.UpdatePlayerHpBar(m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(index, false));
+            m_battleModel.PlayerStatusData.UpdateNowHP(m_battleModel.GetDamageValue(index, false));
 
             await UniTask.WaitWhile(() => m_battleUIView.IsPlayerHpBarAnimation);
 
@@ -553,20 +601,5 @@ public class BattleController : MonoBehaviour
 
         // ディレイをかけてから次に行く
         await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
-    }
-
-    /// <summary>
-    /// 入力受付
-    /// </summary>
-    /// <returns></returns>
-    public async UniTask<int> OnInput(CommandWindowBase window, bool isEscape = false)
-    {
-        bool isReturnKey = false;
-        while (!isReturnKey)
-        {
-            isReturnKey = await window.SelectCommand();
-            if (!isEscape && window.IsEscape) isReturnKey = false;
-        }
-        return window.SelectIndex;
     }
 }
