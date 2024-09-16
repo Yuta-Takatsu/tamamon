@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using TMPro;
 
 /// <summary>
 /// タマモン選択画面ビュークラス
@@ -18,6 +20,9 @@ public class TamamonSelectView : MonoBehaviour
 
     [SerializeField]
     private Image m_closeButtonFrame = default;
+
+    [SerializeField]
+    private TextMeshProUGUI m_informationText = default;
 
     private List<TamamonSelectInfo> m_tamamonInfoObjectList = new List<TamamonSelectInfo>();
     public List<TamamonSelectInfo> TamamonInfoObjectList => m_tamamonInfoObjectList;
@@ -129,6 +134,21 @@ public class TamamonSelectView : MonoBehaviour
         {
             m_tamamonInfoObjectList[index].SetFrame(true);
         }
+    }
+
+    /// <summary>
+    /// テキスト更新
+    /// </summary>
+    /// <param name="message"></param>
+    public async UniTask SetInformationText(string message)
+    {
+        string beforeText = m_informationText.text;
+
+        m_informationText.text = message;
+
+        await UniTask.Delay(TimeSpan.FromSeconds(1f));
+
+        m_informationText.text = beforeText;
     }
 
     /// <summary>

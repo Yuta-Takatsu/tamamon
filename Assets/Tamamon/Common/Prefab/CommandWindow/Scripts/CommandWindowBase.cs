@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
-using TMPro;
 using Cysharp.Threading.Tasks;
 
 public class CommandWindowBase : MonoBehaviour

@@ -14,6 +14,8 @@ public class TamamonSelectController : MonoBehaviour
 
     private TamamonSelectModel m_tamamonSelectModel = default;
 
+    private List<TamamonStatusData> m_tamamonStatusDataList = new List<TamamonStatusData>();
+
     [SerializeField]
     private CommandWindowBase m_tamamonSelectTextWindow = default;
 
@@ -45,6 +47,8 @@ public class TamamonSelectController : MonoBehaviour
 
     private List<string> m_battleCommandTextList = new List<string>() { { "入れ替える" }, { "強さを見る" }, { "閉じる" } };
     private List<string> m_adventureCommandTextList = new List<string>() { { "強さを見る" }, { "並び替える" }, { "持ち物" }, { "閉じる" } };
+    private string m_faintingMessage = "{0} に戦う力は残っていない。";
+    private string m_firstMessage = "{0} は既に戦闘に出ている。";
 
     /// <summary>
     /// 初期化
@@ -67,15 +71,15 @@ public class TamamonSelectController : MonoBehaviour
     /// <param name="tamamonStatusDataList"></param>
     public void UpdateData(List<TamamonStatusData> tamamonStatusDataList)
     {
-        List<TamamonStatusData> list = tamamonStatusDataList;
+        m_tamamonStatusDataList = tamamonStatusDataList;
         if (m_tamamonSelectModel.LastSelectIndex != 0)
         {
-            TamamonStatusData data = list[m_tamamonSelectModel.LastSelectIndex];
-            list[m_tamamonSelectModel.LastSelectIndex] = list[0];
-            list[0] = data;
+            TamamonStatusData data = m_tamamonStatusDataList[m_tamamonSelectModel.LastSelectIndex];
+            m_tamamonStatusDataList[m_tamamonSelectModel.LastSelectIndex] = m_tamamonStatusDataList[0];
+            m_tamamonStatusDataList[0] = data;
         }
 
-        m_tamamonSelectView.UpdateStatusData(list);
+        m_tamamonSelectView.UpdateStatusData(m_tamamonStatusDataList);
 
         m_tamamonSelectModel.MaxSelectIndex = tamamonStatusDataList.Count;
     }
@@ -95,7 +99,7 @@ public class TamamonSelectController : MonoBehaviour
 
         await m_tamamonSelectView.Show(onShowCallback);
 
-        await OnExecute(isEscape,onHideCallback);
+        await OnExecute(isEscape, onHideCallback);
     }
 
     /// <summary>
@@ -159,7 +163,22 @@ public class TamamonSelectController : MonoBehaviour
     {
         if (m_tamamonSelectTextWindow.SelectIndex == 0)
         {
-            m_tamamonSelectState = TamamonSelectStateType.Change;
+            if (m_tamamonStatusDataList[m_tamamonSelectModel.SelectIndex].TamamonStatusDataInfo.NowHP <= 0)
+            {
+                await m_tamamonSelectTextWindow.Hide();
+                string faintingMessage = string.Format(m_faintingMessage, m_tamamonStatusDataList[m_tamamonSelectModel.SelectIndex].TamamonStatusDataInfo.Name);
+                await m_tamamonSelectView.SetInformationText(faintingMessage);
+            }
+            else if (m_tamamonSelectModel.SelectIndex == 0)
+            {
+                await m_tamamonSelectTextWindow.Hide();
+                string firstMessage = string.Format(m_firstMessage, m_tamamonStatusDataList[m_tamamonSelectModel.SelectIndex].TamamonStatusDataInfo.Name);
+                await m_tamamonSelectView.SetInformationText(firstMessage);
+            }
+            else
+            {
+                m_tamamonSelectState = TamamonSelectStateType.Change;
+            }
         }
         else if (m_tamamonSelectTextWindow.SelectIndex == 1)
         {

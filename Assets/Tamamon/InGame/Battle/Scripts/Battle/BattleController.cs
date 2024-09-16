@@ -437,7 +437,7 @@ public class BattleController : MonoBehaviour
     public async UniTask OnTamamonSelect()
     {
         m_tamamonSelectController.UpdateData(m_battleModel.GetPlayerList());
-
+        isTamamonSelectEscape = true;
         await m_tamamonSelectController.Show(isTamamonSelectEscape);
 
         switch (m_tamamonSelectController.TamamonSelectState)
@@ -450,7 +450,6 @@ public class BattleController : MonoBehaviour
                 m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
                 break;
         }
-        isTamamonSelectEscape = true;
     }
 
     /// <summary>
