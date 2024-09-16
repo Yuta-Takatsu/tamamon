@@ -228,11 +228,11 @@ public class BattleController : MonoBehaviour
             commandNameList.Add(statusData.TechniqueData.Name);
         }
         m_battleTextWindowView.BattleUITechniqueTextWindow.UpdateCommandText(commandNameList, true);
+        m_battleTextWindowView.BattleUITechniqueTextWindow.ResetArrowActive();
         Debug.Log(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList.Count);
         Debug.Log(m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex);
         var data = m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList[m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex];
         m_battleTextWindowView.BattleUITechniqueInfoTextWindow.ShowText(data.TechniquePP, data.TechniqueNowPP, TypeData.TypeNameDictionary[data.TechniqueData.Type]);
-        m_battleTextWindowView.BattleUITechniqueTextWindow.ResetArrowActive();
 
         await m_battleTextWindowView.BattleUITechniqueTextWindow.SelectCommand();
 
@@ -305,6 +305,8 @@ public class BattleController : MonoBehaviour
         {
             await OnPlayerBattleStateExecute(m_battleModel.BattleExecuteState);
 
+            if (m_battleModel.BattleState == BattleModel.BattleStateType.Result) return;
+
             // タマモン状態チェック
             // エネミータマモンが瀕死になったかどうか
             if (m_battleModel.IsEnemyFainting())
@@ -323,6 +325,8 @@ public class BattleController : MonoBehaviour
             }
 
             await OnEnemyBattleStateExecute(enemyExecuteType);
+
+            if (m_battleModel.BattleState == BattleModel.BattleStateType.Result) return;
 
             // プレイヤータマモンが瀕死になったかどうか
             if (m_battleModel.IsPlayerFainting())

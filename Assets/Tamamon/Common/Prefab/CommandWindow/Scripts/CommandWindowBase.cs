@@ -23,6 +23,7 @@ public class CommandWindowBase : MonoBehaviour
     public bool IsEscape => m_isEscape;
 
     protected List<CommandWindowText> m_commandWindowTextList = new List<CommandWindowText>();
+    protected List<CommandWindowText> m_commandObjectList = new List<CommandWindowText>();
     public int SelectIndex => m_selectIndex;
 
     /// <summary>
@@ -50,10 +51,12 @@ public class CommandWindowBase : MonoBehaviour
                 {
                     commandWindowText.OnInitialize(comanndTextList[i]);
                     m_commandWindowTextList.Add(commandWindowText);
+                    m_commandObjectList.Add(commandWindowText);
                 }
                 else
                 {
                     commandWindowText.OnInitialize("-");
+                    m_commandObjectList.Add(commandWindowText);
                 }
             }
         }
@@ -79,7 +82,7 @@ public class CommandWindowBase : MonoBehaviour
             }
             else
             {
-                CommandWindowText commandWindowText = Instantiate(m_commandWindowText, m_commandWindowText.transform.parent);
+                CommandWindowText commandWindowText = m_commandObjectList[i];
                 commandWindowText.OnInitialize(comanndTextList[i]);
                 commandWindowText.gameObject.SetActive(true);
                 m_commandWindowTextList.Add(commandWindowText);
@@ -139,7 +142,10 @@ public class CommandWindowBase : MonoBehaviour
     /// </summary>
     public virtual void SetArrowActive()
     {
-        m_commandWindowTextList[m_prevSelectIndex].SetActiveArrow(false);
+        if (m_prevSelectIndex < m_commandWindowTextList.Count)
+        {
+            m_commandWindowTextList[m_prevSelectIndex].SetActiveArrow(false);
+        }
         m_commandWindowTextList[m_selectIndex].SetActiveArrow(true);
     }
 
