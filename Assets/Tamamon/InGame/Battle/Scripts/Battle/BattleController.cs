@@ -229,8 +229,6 @@ public class BattleController : MonoBehaviour
         }
         m_battleTextWindowView.BattleUITechniqueTextWindow.UpdateCommandText(commandNameList, true);
         m_battleTextWindowView.BattleUITechniqueTextWindow.ResetArrowActive();
-        Debug.Log(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList.Count);
-        Debug.Log(m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex);
         var data = m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList[m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex];
         m_battleTextWindowView.BattleUITechniqueInfoTextWindow.ShowText(data.TechniquePP, data.TechniqueNowPP, TypeData.TypeNameDictionary[data.TechniqueData.Type]);
 
@@ -427,7 +425,6 @@ public class BattleController : MonoBehaviour
         {
             await OnEnemyGoExecute(1);
         }
-        Debug.Log("a");
         m_battleModel.BattleTurnEndState = BattleModel.BattleTurnEndType.None;
         m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
     }

@@ -67,7 +67,15 @@ public class TamamonSelectController : MonoBehaviour
     /// <param name="tamamonStatusDataList"></param>
     public void UpdateData(List<TamamonStatusData> tamamonStatusDataList)
     {
-        m_tamamonSelectView.UpdateStatusData(tamamonStatusDataList);
+        List<TamamonStatusData> list = tamamonStatusDataList;
+        if (m_tamamonSelectModel.LastSelectIndex != 0)
+        {
+            TamamonStatusData data = list[m_tamamonSelectModel.LastSelectIndex];
+            list[m_tamamonSelectModel.LastSelectIndex] = list[0];
+            list[0] = data;
+        }
+
+        m_tamamonSelectView.UpdateStatusData(list);
 
         m_tamamonSelectModel.MaxSelectIndex = tamamonStatusDataList.Count;
     }

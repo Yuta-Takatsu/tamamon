@@ -11,6 +11,8 @@ public class TamamonSelectModel
 {
     public int SelectIndex { get; set; } = 0;
 
+    public int LastSelectIndex { get; set; } = 0;
+
     public int PrevSelectIndex { get; set; } = 0;
 
     public int MaxSelectIndex { get; set; } = 0;
@@ -36,7 +38,7 @@ public class TamamonSelectModel
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
                     if (!IsEscape && SelectIndex == MaxSelectIndex) break;
-
+                    if (SelectIndex != MaxSelectIndex) LastSelectIndex = SelectIndex;
                     isDecision = true;
                     break;
                 }
