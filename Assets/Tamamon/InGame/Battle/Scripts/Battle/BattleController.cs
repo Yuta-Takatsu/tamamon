@@ -55,15 +55,10 @@ public class BattleController : MonoBehaviour
 
     private List<string> m_actionCommandList = new List<string>() { "戦う", "バッグ", "タマモン", "逃げる" };
 
-    public void Start()
-    {
-        OnInitialize(3, 2);
-    }
-
     /// <summary>
     /// 初期化
     /// </summary>
-    public void OnInitialize(int enemyId, int playerId)
+    public void OnInitialize(int enemyId)
     {
         m_battleModel = new BattleModel();
 
@@ -87,7 +82,7 @@ public class BattleController : MonoBehaviour
         m_battleModel.AddEnemyList(enemyData_1);
 
         TamamonStatusData playerData_1 = new TamamonStatusData();
-        playerData_1.OnInitialize(playerId, TamamonData.SexType.Female, 7, 1, 1, 2, 3);
+        playerData_1.OnInitialize(2, TamamonData.SexType.Female, 7, 1, 1, 2, 3);
         m_battleModel.AddPlayerList(playerData_1);
 
         TamamonStatusData playerData_2 = new TamamonStatusData();
@@ -106,7 +101,7 @@ public class BattleController : MonoBehaviour
         m_battleUIView.ShowEnemyUI(m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Name, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Sex, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.Level, m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.NowHP);
         m_battleUIView.ShowPlayerUI(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Name, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Sex, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Level, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.Exp, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowExp, m_battleModel.PlayerStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.PlayerStatusData.TamamonStatusDataInfo.NowHP);
         m_battleTextWindowView.BattleUIMessageTextWindow.OnInitialize();
-        m_battleTamamonView.OnInitialize(enemyId, playerId);
+        m_battleTamamonView.OnInitialize(enemyId, 2);
         m_tamamonSelectController.OnInitialize(m_battleModel.GetPlayerList(), TamamonSelectController.TamamonSelectViewType.Battle);
 
         // 行動コマンド初期化
@@ -497,7 +492,9 @@ public class BattleController : MonoBehaviour
             default:
                 break;
         }
-        await SceneManager.Instance.UnLoadSceneAsync("Battle");
+
+        // バトルシーン破棄
+        await BattleManager.Instance.UnLoadBattleScene();
 
         await SoundManager.Instance.StopBGMAsync();
     }
@@ -608,6 +605,7 @@ public class BattleController : MonoBehaviour
 
         m_battleUIView.UpdateEnemyHpBar(m_battleModel.EnemyStatusData.TamamonStatusValueDataInfo.HP, m_battleModel.EnemyStatusData.TamamonStatusDataInfo.NowHP, m_battleModel.GetDamageValue(m_commandIndex, true));
         m_battleModel.EnemyStatusData.UpdateNowHP(m_battleModel.GetDamageValue(m_commandIndex, true));
+        m_battleModel.PlayerStatusData.UpdateTechniqueNowPP(1, m_commandIndex);
 
         await UniTask.WaitWhile(() => m_battleUIView.IsEnemyHpBarAnimation);
 
