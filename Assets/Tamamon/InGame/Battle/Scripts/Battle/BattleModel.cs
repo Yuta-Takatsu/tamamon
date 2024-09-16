@@ -120,23 +120,6 @@ public class BattleModel
     }
 
     /// <summary>
-    /// バトルステート実行コールバック
-    /// </summary>
-    /// <param name="state"></param>
-    /// <param name="isPlayerTurn"></param>
-    public void OnBattkeStateExecute(BattleExecuteType state, bool isPlayerTurn)
-    {
-        if (isPlayerTurn)
-        {
-            m_playerBattleStateCallbackDictionary[state]?.Invoke();
-        }
-        else
-        {
-            m_enemyBattleStateCallbackDictionary[state]?.Invoke();
-        }
-    }
-
-    /// <summary>
     /// ステート変更時実行コールバックをセット
     /// </summary>
     /// <param name="state"></param>

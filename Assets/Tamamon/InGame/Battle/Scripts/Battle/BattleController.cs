@@ -80,24 +80,6 @@ public class BattleController : MonoBehaviour
         m_battleModel.SetCallbackDictionary(BattleModel.BattleStateType.ItemSelect, async () => await OnItemSelect());
         m_battleModel.SetCallbackDictionary(BattleModel.BattleStateType.Result, async () => await OnResult());
 
-        // バトルステート実行コールバック登録
-        m_battleModel.SetEnemyBattleStateCallbackDictionary(BattleModel.BattleExecuteType.Technique, async () => await OnEnemyTechniqueExecute());
-        m_battleModel.SetEnemyBattleStateCallbackDictionary(BattleModel.BattleExecuteType.Change, async () =>
-        {
-            await OnEnemyComeBackExecute();         
-            await OnEnemyGoExecute(1);
-        });
-        m_battleModel.SetEnemyBattleStateCallbackDictionary(BattleModel.BattleExecuteType.Item, async () => await OnEnemyItemExecute());
-        m_battleModel.SetEnemyBattleStateCallbackDictionary(BattleModel.BattleExecuteType.Escape, async () => await OnEnemyEscapeExecute());
-
-        m_battleModel.SetPlayerBattleStateCallbackDictionary(BattleModel.BattleExecuteType.Technique, async () => await OnPlayerTechniqueExecute());
-        m_battleModel.SetPlayerBattleStateCallbackDictionary(BattleModel.BattleExecuteType.Change, async () =>
-        {
-            await OnPlayerComeBackExecute();
-            await OnPlayerGoExecute();
-        });
-        m_battleModel.SetPlayerBattleStateCallbackDictionary(BattleModel.BattleExecuteType.Item, async () => await OnPlayerItemExecute());
-        m_battleModel.SetPlayerBattleStateCallbackDictionary(BattleModel.BattleExecuteType.Escape, async () => await OnPlayerEscapeExecute());
 
         // タマモン情報初期化  
         TamamonStatusData enemyData_1 = new TamamonStatusData();
@@ -246,6 +228,8 @@ public class BattleController : MonoBehaviour
             commandNameList.Add(statusData.TechniqueData.Name);
         }
         m_battleTextWindowView.BattleUITechniqueTextWindow.UpdateCommandText(commandNameList, true);
+        Debug.Log(m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList.Count);
+        Debug.Log(m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex);
         var data = m_battleModel.PlayerStatusData.TamamonStatusDataInfo.TechniqueList[m_battleTextWindowView.BattleUITechniqueTextWindow.SelectIndex];
         m_battleTextWindowView.BattleUITechniqueInfoTextWindow.ShowText(data.TechniquePP, data.TechniqueNowPP, TypeData.TypeNameDictionary[data.TechniqueData.Type]);
         m_battleTextWindowView.BattleUITechniqueTextWindow.ResetArrowActive();
@@ -319,7 +303,7 @@ public class BattleController : MonoBehaviour
         // 実行
         if (isPlayerTurn)
         {
-            m_battleModel.OnBattkeStateExecute(m_battleModel.BattleExecuteState, isPlayerTurn);
+            await OnPlayerBattleStateExecute(m_battleModel.BattleExecuteState);
 
             // タマモン状態チェック
             // エネミータマモンが瀕死になったかどうか
@@ -338,7 +322,7 @@ public class BattleController : MonoBehaviour
                 await OnPlayerFainting();
             }
 
-            m_battleModel.OnBattkeStateExecute(enemyExecuteType, isPlayerTurn);
+            await OnEnemyBattleStateExecute(enemyExecuteType);
 
             // プレイヤータマモンが瀕死になったかどうか
             if (m_battleModel.IsPlayerFainting())
@@ -355,7 +339,7 @@ public class BattleController : MonoBehaviour
         }
         else
         {
-            m_battleModel.OnBattkeStateExecute(enemyExecuteType, isPlayerTurn);
+            await OnEnemyBattleStateExecute(enemyExecuteType);
 
             // プレイヤータマモンが瀕死になったかどうか
             if (m_battleModel.IsPlayerFainting())
@@ -374,7 +358,7 @@ public class BattleController : MonoBehaviour
                 await OnEnemyFainting();
             }
 
-            m_battleModel.OnBattkeStateExecute(m_battleModel.BattleExecuteState, isPlayerTurn);
+            await OnPlayerBattleStateExecute(m_battleModel.BattleExecuteState);
 
             // タマモン状態チェック
             // エネミータマモンが瀕死になったかどうか
@@ -558,6 +542,62 @@ public class BattleController : MonoBehaviour
                 await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_dontAffectiveMessage);
                 break;
         }
+
+        // ディレイをかけてから次に行く
+        await UniTask.Delay(TimeSpan.FromSeconds(1f));
+    }
+
+    /// <summary>
+    /// エネミー側行動実行
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask OnEnemyBattleStateExecute(BattleModel.BattleExecuteType state)
+    {
+        switch (state)
+        {
+            case BattleModel.BattleExecuteType.None:
+                break;
+            case BattleModel.BattleExecuteType.Technique:
+                await OnEnemyTechniqueExecute();
+                break;
+            case BattleModel.BattleExecuteType.Item:
+                await OnEnemyItemExecute();
+                break;
+            case BattleModel.BattleExecuteType.Change:
+                await OnEnemyComeBackExecute();
+                await OnEnemyGoExecute(1);
+                break;
+            case BattleModel.BattleExecuteType.Escape:
+                await OnEnemyEscapeExecute();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// プレイヤー側行動実行
+    /// </summary>
+    /// <param name="state"></param>
+    /// <returns></returns>
+    public async UniTask OnPlayerBattleStateExecute(BattleModel.BattleExecuteType state)
+    {
+        switch (state)
+        {
+            case BattleModel.BattleExecuteType.None:
+                break;
+            case BattleModel.BattleExecuteType.Technique:
+                await OnPlayerTechniqueExecute();
+                break;
+            case BattleModel.BattleExecuteType.Item:
+                await OnPlayerItemExecute();
+                break;
+            case BattleModel.BattleExecuteType.Change:
+                await OnPlayerComeBackExecute();
+                await OnPlayerGoExecute();
+                break;
+            case BattleModel.BattleExecuteType.Escape:
+                await OnPlayerEscapeExecute();
+                break;
+        }
     }
 
     /// <summary>
@@ -602,7 +642,6 @@ public class BattleController : MonoBehaviour
             return;
         }
 
-        //瀕死になっていなければエネミーの行動
         // ディレイをかけてから次に行く
         await UniTask.Delay(TimeSpan.FromSeconds(1f));
     }
