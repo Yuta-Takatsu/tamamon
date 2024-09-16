@@ -312,12 +312,10 @@ public class BattleController : MonoBehaviour
             if (m_battleModel.IsEnemyFainting())
             {
                 await OnEnemyFainting();
-
                 // ターン終了ステートに変更
                 m_battleModel.BattleState = BattleModel.BattleStateType.TurnEnd;
                 return;
             }
-
             // プレイヤータマモンが瀕死になったかどうか
             if (m_battleModel.IsPlayerFainting())
             {
@@ -377,7 +375,6 @@ public class BattleController : MonoBehaviour
                 await OnPlayerFainting();
             }
         }
-
         // ターン終了ステートに変更
         m_battleModel.BattleState = BattleModel.BattleStateType.TurnEnd;
     }
@@ -430,7 +427,7 @@ public class BattleController : MonoBehaviour
         {
             await OnEnemyGoExecute(1);
         }
-
+        Debug.Log("a");
         m_battleModel.BattleTurnEndState = BattleModel.BattleTurnEndType.None;
         m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
     }
@@ -636,16 +633,6 @@ public class BattleController : MonoBehaviour
                 await m_battleTextWindowView.BattleUIMessageTextWindow.ShowMessageTextAsync(m_dontAffectiveMessage);
                 break;
         }
-
-        if (m_battleModel.IsEnemyFainting())
-        {
-            // ディレイをかけてから次に行く
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
-            // ターン終了ステートに変更
-            m_battleModel.BattleState = BattleModel.BattleStateType.TurnEnd;
-            return;
-        }
-
         // ディレイをかけてから次に行く
         await UniTask.Delay(TimeSpan.FromSeconds(1f));
     }
