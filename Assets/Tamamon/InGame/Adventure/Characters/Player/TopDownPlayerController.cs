@@ -7,12 +7,19 @@ using UnityEngine;
 /// </summary>
 public class TopDownPlayerController : TopDownCharacterController
 {
-
     /// <summary>
     /// èâä˙âª
     /// </summary>
     public override void OnInitialize(TopDownCharacterBase controllCharacter)
     {
-        base.OnInitialize(controllCharacter);
+        m_characterClass = controllCharacter;
+        m_state = new TopDownPlayerState();
+
+        m_state.OnInitialize(TopDownCharacterState.State.WAIT_KEY, this);
+
+        var info = new TopDownCharacterState.StateBredgeInfo() {
+            nextState = TopDownCharacterState.State.WAIT_KEY
+		};
+		m_state.RequestSwitchState(info);
     }
 }

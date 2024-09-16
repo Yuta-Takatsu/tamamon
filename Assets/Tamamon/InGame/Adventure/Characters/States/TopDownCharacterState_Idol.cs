@@ -1,69 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using Cysharp.Threading.Tasks;
 
 
 public partial class TopDownCharacterState
 {
-
-	public class TopDownCharacterState_Idol : IState
+	public class TopDownCharacterState_Idol : TopDownCharacterStateBase
 	{
-		public State m_nextState = State.IDOL;
-		public KeyCode m_pushKey = KeyCode.None;
-
-		public async void OnInitialize(State beforeState)
+		public override void OnInitialize(StateBredgeInfo beforeStateInfo,TopDownCharacterController controller)
 		{
-			await UniTask.WaitUntil(() => true);
+			base.OnInitialize(beforeStateInfo, controller);
 		}
 
-		public async void OnEntry()
+		public override async UniTask<StateBredgeInfo> OnExecute()
 		{
-			m_pushKey = KeyCode.None;
-			m_nextState = State.IDOL;
+			m_nextStateInfo.nextState = State.IDOL;
 
 			Debug.Log("Start Idol!");
-			await OnExecute();
+			await OnExecuteInner();
 
-			OnFinish();
+			var info = GetFinishData();
+			return info;
 		}
 
-		public async UniTask<State> OnExecute()
+		public override async UniTask<State> OnExecuteInner()
 		{
-			while ( m_pushKey == KeyCode.None ) {
-				Debug.Log("Idoling!");
+			await UniTask.Yield();
 
-				if( Input.GetKey(KeyCode.UpArrow)) {
-					m_pushKey = KeyCode.UpArrow;
-				}
-				if( Input.GetKey(KeyCode.RightArrow)) {
-					m_pushKey = KeyCode.RightArrow;
-				}
-				if( Input.GetKey(KeyCode.DownArrow)) {
-					m_pushKey = KeyCode.DownArrow;
-				}
-				if( Input.GetKey(KeyCode.LeftArrow)) {
-					m_pushKey = KeyCode.LeftArrow;
-				}
-
-				await UniTask.Yield();
-			}
-
-			m_nextState = State.MOVE;
-			return m_nextState;
+			m_nextStateInfo.nextState = State.IDOL;
+			return m_nextStateInfo.nextState;
 		}
 
-		public NextStatePassInfo OnFinish()
+		public override StateBredgeInfo GetFinishData()
 		{
 			Debug.Log("End Idol!");
-
-			var nextInfo = new NextStatePassInfo(){
-				nextState = m_nextState,
-				keycode = m_pushKey
-			};
-
-			return nextInfo;
+			return m_nextStateInfo;
 		}
 	}
 
