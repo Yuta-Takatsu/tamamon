@@ -55,6 +55,10 @@ public class BattleController : MonoBehaviour
 
     private List<string> m_actionCommandList = new List<string>() { "戦う", "バッグ", "タマモン", "逃げる" };
 
+    public void Start()
+    {
+        OnInitialize(3);
+    }
     /// <summary>
     /// 初期化
     /// </summary>
@@ -453,7 +457,13 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnItemSelect()
     {
+        UIManager.Instance.LoadInventoryObject();
+
         await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        UIManager.Instance.UnLoadInventoryObject();
+
+        m_battleModel.BattleState = BattleModel.BattleStateType.ActionSelect;
     }
 
     /// <summary>

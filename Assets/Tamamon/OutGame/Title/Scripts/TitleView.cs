@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using UnityEngine.U2D;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
-using Tamamon.Framework;
 
 namespace Tamamon.OutGame
 {

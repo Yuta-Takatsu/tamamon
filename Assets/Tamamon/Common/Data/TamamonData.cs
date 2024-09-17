@@ -64,12 +64,12 @@ public class TamamonData
             tamamonDataInfomation.Name = "ヤドシハンシ";
             tamamonDataInfomation.ExpTableId = 1;
             tamamonDataInfomation.SexTypeId = 0;
-            tamamonDataInfomation.HP = 999;// 80;
+            tamamonDataInfomation.HP =  80;
             tamamonDataInfomation.Attack = 130;
             tamamonDataInfomation.Defense = 115;
             tamamonDataInfomation.SpecialAttack = 65;
             tamamonDataInfomation.SpecialDefense = 85;
-            tamamonDataInfomation.Speed = 999;// 55;
+            tamamonDataInfomation.Speed =  999;
 
             tamamonDataInfomation.TypeList = new List<TypeData.Type>();
             tamamonDataInfomation.TypeList.Add(TypeData.Type.Water);
@@ -86,12 +86,12 @@ public class TamamonData
             tamamonDataInfomation.Name = "イレイワト";
             tamamonDataInfomation.ExpTableId = 1;
             tamamonDataInfomation.SexTypeId = 0;
-            tamamonDataInfomation.HP = 999;// 66;
+            tamamonDataInfomation.HP =  66;
             tamamonDataInfomation.Attack = 66;
             tamamonDataInfomation.Defense = 160;
             tamamonDataInfomation.SpecialAttack = 106;
             tamamonDataInfomation.SpecialDefense = 70;
-            tamamonDataInfomation.Speed = 999;// 44;
+            tamamonDataInfomation.Speed = 44;
 
             tamamonDataInfomation.TypeList = new List<TypeData.Type>();
             tamamonDataInfomation.TypeList.Add(TypeData.Type.Rock);
