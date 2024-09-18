@@ -21,6 +21,7 @@ public class BattleTamamonView : MonoBehaviour
     private readonly float EnemyStartLocalPositionX = -1350f;
     private readonly float EnemyEndLocalPositionX = 350f;
 
+    private readonly float TamamonFirstLocalPositionY = -256f;
     private readonly float TamamonDownEndLocalPositionY = -768f;
 
     private bool m_isAnimation = false;
@@ -104,6 +105,23 @@ public class BattleTamamonView : MonoBehaviour
     }
 
     /// <summary>
+    /// 座標更新
+    /// </summary>
+    /// <param name="localPosition"></param>
+    public void UpdatePlayerLocalPosition(Vector2 localPosition)
+    {
+        m_playerTamamonImage.transform.localPosition = localPosition;
+    }
+
+    /// <summary>
+    /// スケール更新
+    /// </summary>
+    /// <param name="scale"></param>
+    public void UpdateEnemyImageScale(Vector2 scale)
+    {
+        m_enemyTamamonImage.transform.localScale = scale;
+    }
+    /// <summary>
     /// スケール更新
     /// </summary>
     /// <param name="scale"></param>
@@ -165,6 +183,32 @@ public class BattleTamamonView : MonoBehaviour
         else
         {
             m_enemyTamamonImage.transform.DOScale(new Vector3(0, 0, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
+        }
+
+        await UniTask.WaitWhile(() => m_isAnimation);
+    }
+
+    /// <summary>
+    /// バトル繰り出し時アニメーション
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public async UniTask OnGoAnimation(bool isPlayer)
+    {
+        m_isAnimation = true;
+
+        if (isPlayer)
+        {
+            UpdatePlayerLocalPosition(new Vector2(m_playerTamamonImage.transform.localPosition.x, TamamonFirstLocalPositionY));
+            UpdatePlayerImageScale(new Vector2(0, 0));
+            m_playerTamamonImage.transform.DOScale(new Vector3(-1, 1, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
+        }
+        else
+        {
+            UpdateEnemyLocalPosition(new Vector2(m_enemyTamamonImage.transform.localPosition.x, TamamonFirstLocalPositionY));
+            UpdateEnemyImageScale(new Vector2(0, 0));
+            m_enemyTamamonImage.transform.localPosition = new Vector3(m_enemyTamamonImage.transform.localPosition.x, TamamonFirstLocalPositionY, m_enemyTamamonImage.transform.localPosition.z);
+            m_enemyTamamonImage.transform.DOScale(new Vector3(1, 1, 1), 0.5f).OnComplete(() => { m_isAnimation = false; });
         }
 
         await UniTask.WaitWhile(() => m_isAnimation);

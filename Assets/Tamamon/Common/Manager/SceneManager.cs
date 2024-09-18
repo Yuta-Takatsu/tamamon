@@ -28,6 +28,20 @@ namespace Tamamon.Framework
             await Resources.UnloadUnusedAssets();
         }
 
+        public GameObject GetSceneByName(string sceneName, string name)
+        {
+            var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
+
+            foreach (var obj in scene.GetRootGameObjects())
+            {
+                if(obj.name == name)
+                {
+                    return obj;
+                }
+            }
+            return null;
+        }
+
         public async UniTask FadeIn()
         {
             m_isFade = true;

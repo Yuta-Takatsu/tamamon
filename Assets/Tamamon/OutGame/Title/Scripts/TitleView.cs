@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using UnityEngine.U2D;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
-using Tamamon.Framework;
 
 namespace Tamamon.OutGame
 {
@@ -42,7 +41,7 @@ namespace Tamamon.OutGame
         public async UniTask ChangeScene()
         {
             await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-            await SceneManager.Instance.LoadSceneAsync("Battle",UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            await BattleManager.Instance.LoadBattleScene(3);
         }
 
         public async UniTask PlayLeftOutAnimation()

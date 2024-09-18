@@ -11,11 +11,15 @@ public class TamamonSelectModel
 {
     public int SelectIndex { get; set; } = 0;
 
+    public int LastSelectIndex { get; set; } = 0;
+
     public int PrevSelectIndex { get; set; } = 0;
 
     public int MaxSelectIndex { get; set; } = 0;
 
     public bool IsShow { get; set; } = false;
+
+    public bool IsEscape { get; set; } = true;
 
     /// <summary>
     /// “ü—Í‘Ò‹@
@@ -33,12 +37,14 @@ public class TamamonSelectModel
             {
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
+                    if (!IsEscape && SelectIndex == MaxSelectIndex) break;
+                    if (SelectIndex != MaxSelectIndex) LastSelectIndex = SelectIndex;
                     isDecision = true;
                     break;
                 }
                 else if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    if (SelectIndex == MaxSelectIndex)
+                    if (IsEscape && SelectIndex == MaxSelectIndex)
                     {
                         isDecision = true;
                         break;
