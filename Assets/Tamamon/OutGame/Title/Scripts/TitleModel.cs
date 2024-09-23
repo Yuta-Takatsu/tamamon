@@ -1,18 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
+using UniRx;
 
-public class TitleModel : MonoBehaviour
+namespace Tamamon.OutGame.Title
 {
-    // Start is called before the first frame update
-    void Start()
+    public class TitleModel
     {
-        
-    }
+        private ReactiveProperty<ITitleState> m_titleStateProperty = new();
+        public IObservable<ITitleState> Observable => m_titleStateProperty;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private ITitleState m_prevTitleState = default;
+
+        public void SetTitleState(ITitleState state)
+        {
+            m_titleStateProperty.Value = state;
+        }
+
+        public void OnExecute()
+        {
+            if (m_prevTitleState != null)
+            {
+                m_prevTitleState.OnFinalize();
+            }
+            m_prevTitleState = m_titleStateProperty.Value;
+            m_titleStateProperty.Value.OnExecute();
+
+        }
     }
 }
