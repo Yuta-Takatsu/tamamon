@@ -15,7 +15,7 @@ public static class MasterDataDefine
 		public struct masStruct_monstersInfo {
 			int id;							// タマモンID
 			int tribeId;					// 種族ID
-			int evoGroupVal;				// 進化値(最終進化を<9とし、以後１つ手前の進化になるごとに10倍する)
+			int evoGroupVal;				// 進化値				MEMO:最終進化を<9とし、以後１つ手前の進化になるごとに10倍する
 			string name;					// 名前					MEMO:テキストマスタあるんか？
 
 			float height;					// 重さ

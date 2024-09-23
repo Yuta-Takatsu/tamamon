@@ -38,14 +38,14 @@ public class LoadMasterData : Editor
         }
         else
         {
-            ImportMasterData(www.downloadHandler.text, assetfile);
+            ImportTamamonMasterData(www.downloadHandler.text, assetfile);
 #if DEBUG_LOG || UNITY_EDITOR
             Debug.Log("Imported Asset: " + assetfile);
 #endif
         }
     }
 
-    static void ImportMasterData(string text, string assetfile)
+    static void ImportTamamonMasterData(string text, string assetfile)
     {
         List<string[]> rows = CSVSerializer.ParseCSV(text);
         if (rows != null)
