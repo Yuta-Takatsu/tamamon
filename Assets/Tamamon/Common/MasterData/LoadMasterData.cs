@@ -50,13 +50,13 @@ public class LoadMasterData : Editor
         List<string[]> rows = CSVSerializer.ParseCSV(text);
         if (rows != null)
         {
-            MasterDataDefine.masClass_monsters md = AssetDatabase.LoadAssetAtPath<MasterDataDefine.masClass_monsters>(assetfile);
+            MasterData_TamamonMaster md = AssetDatabase.LoadAssetAtPath<MasterData_TamamonMaster>(assetfile);
             if (md == null)
             {
-                md = new MasterDataDefine.masClass_monsters();
+                md = new MasterData_TamamonMaster();
                 AssetDatabase.CreateAsset(md, assetfile);
             }
-            md.m_Items = CSVSerializer.Deserialize<MasterDataDefine.masClass_monsters.masStruct_monstersInfo>(rows);
+            md.m_Items = CSVSerializer.Deserialize<MasterData_TamamonMaster.masStruct_monstersInfo>(rows);
 
             EditorUtility.SetDirty(md);
             AssetDatabase.SaveAssets();
