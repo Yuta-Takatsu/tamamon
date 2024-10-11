@@ -1,5 +1,4 @@
 using UnityEngine;
-using Tamamon.Framework;
 using UniRx;
 
 using Framework.SaveData;
@@ -61,9 +60,6 @@ namespace Tamamon.OutGame.Title
             });
 
             m_titleModel.Observable.Skip(1).Subscribe(state => m_titleModel.OnExecute());
-
-            // BGM再生
-            SoundManager.Instance.PlayBGM(SoundManager.BGM_Type.Title);
 
             // ステート切り替え
             m_titleModel.SetTitleState(m_openingState);

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UniRx;
-using Tamamon.Framework;
+using Framework.Sound;
+using Framework.Scene;
 
 /// <summary>
 /// バトルコントローラークラス

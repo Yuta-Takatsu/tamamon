@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine.Audio;
 using Cysharp.Threading.Tasks;
 
-namespace Tamamon.Framework
+namespace Framework.Sound
 {
     /// <summary>
     /// 音源管理クラス
@@ -86,7 +86,7 @@ namespace Tamamon.Framework
         /// </summary>
         /// <param name="bgmType"></param>
         /// <param name="loopFlg"></param>
-        public void PlayBGM(BGM_Type bgmType, bool loopFlg = true)
+        public void PlayBGM(BGM_Type bgmType, bool loopFlg = true,bool isCrossFade = true)
         {
             // BGMなしの状態にする場合            
             if ((int)bgmType == 999)
@@ -122,8 +122,48 @@ namespace Tamamon.Framework
             }
             else
             {
-                // クロスフェード処理
-                CrossFadeChangeBMG(index, loopFlg).Forget();
+                if (isCrossFade)
+                {
+                    // クロスフェード処理
+                    CrossFadeChangeBMG(index, loopFlg).Forget();
+                }
+                else
+                {
+                    ChangeBGM(index, loopFlg);
+                }
+            }
+        }
+
+        /// <summary>
+        /// BGM切り替え
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="loopFlg"></param>
+        private void ChangeBGM(int index, bool loopFlg)
+        {
+            if (BGM_Sources[0].clip != null)
+            {
+                // [0]が再生されている場合、[1]を新しい曲として再生
+                BGM_Sources[0].volume = 0;
+                BGM_Sources[0].Stop();
+                BGM_Sources[0].clip = null;
+
+                BGM_Sources[1].volume = BGM_Volume;
+                BGM_Sources[1].clip = BGM_Clips[index];
+                BGM_Sources[1].loop = loopFlg;
+                BGM_Sources[1].Play();
+            }
+            else
+            {
+                // [1]が再生されている場合、[0]を新しい曲として再生
+                BGM_Sources[1].volume = 0;
+                BGM_Sources[1].Stop();
+                BGM_Sources[1].clip = null;
+
+                BGM_Sources[0].volume = BGM_Volume;
+                BGM_Sources[0].clip = BGM_Clips[index];
+                BGM_Sources[0].loop = loopFlg;
+                BGM_Sources[0].Play();
             }
         }
 
@@ -249,6 +289,16 @@ namespace Tamamon.Framework
         {
             BGM_Sources[0].Stop();
             BGM_Sources[1].Stop();
+        }
+
+        /// <summary>
+        /// BGMの更新
+        /// </summary>
+        /// <param name="bgmType"></param>
+        /// <param name="audioClip"></param>
+        public void UpdateBGM(BGM_Type bgmType, AudioClip audioClip)
+        {
+            BGM_Clips[(int)bgmType] = audioClip;
         }
 
         /// <summary>

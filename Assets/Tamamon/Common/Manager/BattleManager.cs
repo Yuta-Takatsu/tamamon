@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Tamamon.Framework;
+using Framework.Scene;
 
 public class BattleManager : MonoBehaviourSingleton<BattleManager>
 {

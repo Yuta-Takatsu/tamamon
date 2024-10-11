@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 
-namespace Tamamon.Framework
+namespace Framework.Scene
 {
     public class SceneManager : MonoBehaviourSingleton<SceneManager>
     {

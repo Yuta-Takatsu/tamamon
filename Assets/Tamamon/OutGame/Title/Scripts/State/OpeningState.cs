@@ -1,5 +1,6 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using Framework.Sound;
 
 namespace Tamamon.OutGame.Title
 {
@@ -15,6 +16,10 @@ namespace Tamamon.OutGame.Title
 
         public void OnExecute()
         {
+
+            // BGMçƒê∂
+            SoundManager.Instance.PlayBGM(SoundManager.BGM_Type.Title);
+
             SkipScene().Forget();
             m_openingView.OnExecute();
         }
