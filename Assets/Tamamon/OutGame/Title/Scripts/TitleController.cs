@@ -2,6 +2,8 @@ using UnityEngine;
 using Tamamon.Framework;
 using UniRx;
 
+using Framework.SaveData;
+
 namespace Tamamon.OutGame.Title
 {
     public class TitleController : MonoBehaviour
@@ -20,6 +22,26 @@ namespace Tamamon.OutGame.Title
         void Start()
         {
             OnInitialize();
+
+            /*
+            SaveData saveData = new SaveData()
+            {
+                PlayerName = "ytakatsu",
+                Party = new System.Collections.Generic.List<int>
+                { 1, 2,3 },
+            };
+
+            DataBank.Instance.UpdateData("PlayerName", saveData);
+
+            DataBank.Instance.SaveAll();
+            */
+            SaveData loadData = new SaveData();
+
+            DataBank.Instance.Load<SaveData>("PlayerName");
+            Debug.Log("Load");
+
+            loadData = DataBank.Instance.Get<SaveData>("PlayerName");
+            Debug.Log(loadData);
         }
 
         public void OnInitialize()
