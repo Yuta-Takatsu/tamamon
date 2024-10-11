@@ -1,7 +1,7 @@
 using UnityEngine;
 using UniRx;
 
-using Framework.SaveData;
+using Framework;
 
 namespace Tamamon.OutGame.Title
 {

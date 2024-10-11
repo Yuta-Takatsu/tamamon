@@ -38,7 +38,7 @@ namespace Framework
                 Button button = Instantiate(m_button, m_button.transform.parent);
                 button.GetComponentInChildren<TextMeshProUGUI>().text = sceneName;
 
-                button.onClick.AddListener(async () => await Scene.SceneManager.Instance.LoadSceneAsync($"{sceneName}"));
+                button.onClick.AddListener(async () => await SceneManager.Instance.LoadSceneAsync($"{sceneName}"));
             }
 
             m_button.gameObject.SetActive(false);

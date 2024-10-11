@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace Framework.SaveData
+namespace Framework
 {
     /// <summary>
     /// バイナリデータをgzipフォーマットで圧縮、解凍

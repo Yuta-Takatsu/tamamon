@@ -2,7 +2,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 
-namespace Framework.Scene
+namespace Framework
 {
     public class SceneManager : MonoBehaviourSingleton<SceneManager>
     {

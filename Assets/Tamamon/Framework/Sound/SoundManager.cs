@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine.Audio;
 using Cysharp.Threading.Tasks;
 
-namespace Framework.Sound
+namespace Framework
 {
     /// <summary>
     /// ‰¹Œ¹ŠÇ—ƒNƒ‰ƒX

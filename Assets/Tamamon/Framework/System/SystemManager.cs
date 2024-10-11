@@ -22,9 +22,9 @@ namespace Framework
         {
             string sceneName = "Boot";
 
-            if (!SceneManager.GetSceneByName(sceneName).IsValid())
+            if (!UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName).IsValid())
             {
-                SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
             }
         }
 

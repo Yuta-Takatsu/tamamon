@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace Framework.SaveData
+namespace Framework
 {
     /// <summary>
     /// データをAESも用いて暗号化、複合化

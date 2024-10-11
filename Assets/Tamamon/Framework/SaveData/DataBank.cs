@@ -5,7 +5,7 @@ using UnityEngine;
 using System.IO;
 using System.Text;
 
-namespace Framework.SaveData
+namespace Framework
 {
     /// <summary>
     /// セーブデータ管理クラス

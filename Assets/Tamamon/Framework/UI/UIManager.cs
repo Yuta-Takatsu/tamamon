@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Framework.UI
+namespace Framework
 {
     public class UIManager : MonoBehaviourSingleton<UIManager>
     {

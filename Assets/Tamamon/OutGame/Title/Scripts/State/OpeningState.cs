@@ -1,6 +1,6 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Framework.Sound;
+using Framework;
 
 namespace Tamamon.OutGame.Title
 {
