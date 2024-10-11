@@ -12,7 +12,7 @@ public class BattleManager : MonoBehaviourSingleton<BattleManager>
         await SceneManager.Instance.LoadSceneAsync("Battle", UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
         // BattleScene‚ÌBattleController‚ðŽæ“¾
-        BattleController controller = SceneManager.Instance.GetSceneByName("Battle", "BattleController").GetComponent<BattleController>();
+        BattleController controller = SceneManager.Instance.GetSceneObjectByName("Battle", "BattleController").GetComponent<BattleController>();
 
         controller.OnInitialize(enemyId);
     }

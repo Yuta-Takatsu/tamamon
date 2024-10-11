@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using UniRx;
 using Framework.Sound;
 using Framework.Scene;
+using Framework.UI;
 
 /// <summary>
 /// バトルコントローラークラス
@@ -141,8 +142,6 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnEncount()
     {
-
-        await SceneManager.Instance.FadeOut();
 
         await m_battleTamamonView.PlayEncountEnemyAnimation();
 

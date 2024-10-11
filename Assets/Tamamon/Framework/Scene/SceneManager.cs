@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 
@@ -18,6 +17,8 @@ namespace Framework.Scene
             if (isFade) await FadeIn();
 
             await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, mode);
+
+            await SceneManager.Instance.FadeOut();
         }
 
         public async UniTask UnLoadSceneAsync(string name, bool isFade = true)
@@ -28,7 +29,12 @@ namespace Framework.Scene
             await Resources.UnloadUnusedAssets();
         }
 
-        public GameObject GetSceneByName(string sceneName, string name)
+        public UnityEngine.SceneManagement.Scene GetSceneByName(string sceneName)
+        {
+            return UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
+        }
+
+        public GameObject GetSceneObjectByName(string sceneName, string name)
         {
             var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
 
@@ -45,6 +51,7 @@ namespace Framework.Scene
         public async UniTask FadeIn()
         {
             m_isFade = true;
+            m_fadePanel.gameObject.SetActive(true);
             m_fadePanel.alpha = 0f;
             m_fadePanel.DOFade(1f, FadeTime)
                 .OnComplete(() =>
@@ -63,6 +70,7 @@ namespace Framework.Scene
             m_fadePanel.DOFade(0f, FadeTime)
                 .OnComplete(() =>
                 {
+                    m_fadePanel.gameObject.SetActive(false);
                     m_fadePanel.alpha = 0f;
                     m_isFade = false;
                 });

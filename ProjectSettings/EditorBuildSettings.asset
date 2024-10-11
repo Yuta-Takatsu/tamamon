@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Tamamon/OutGame/Title/Scene/Title.unity
     guid: 4b3b74a2b8a92cc4f925c180a8ee246c
   - enabled: 1
+    path: Assets/Tamamon/InGame/Adventure/Scene/Main/Cty001.unity
+    guid: cb755bf0ff6b8ed4ea61e34b671b6ae5
+  - enabled: 1
     path: Assets/Tamamon/InGame/Battle/Scene/Battle.unity
     guid: 857000de0a20e574fa0c655daa10911e
   m_configObjects: {}
