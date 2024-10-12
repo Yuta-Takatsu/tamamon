@@ -8,40 +8,40 @@ using UnityEngine;
 public class MasterData_TamamonMaster : ScriptableObject
 {
 	[System.Serializable]
-	public struct masStruct_monstersInfo {
-		int id;											// タマモンID
-		int tribeId;									// 種族ID
-		int evoGroupVal;								// 進化値				MEMO:最終進化を<9とし、以後１つ手前の進化になるごとに10倍する
-		string name;									// 名前					MEMO:テキストマスタあるんか？
+	public class MonstersInfo {
+		public int id;											// タマモンID
+		public int tribeId;									// 種族ID
+		public int evoGroupVal;								// 進化値				MEMO:最終進化を<9とし、以後１つ手前の進化になるごとに10倍する
+		public string name;									// 名前					MEMO:テキストマスタあるんか？
 
-		float height;									// 重さ
-		float weight;									// 高さ
-		int tamaDexId;									// タマモン図鑑ID
-		int voiceId;									// 声ID
-		int maleRatio;									// オスになる確率
-		int femaleRatio;								// メスになる確率		MEMO:性別なしは設けず、maleもfemaleも０なら性別なしとする
-		MasterDataDefine.masEnum_expTable expTable;		// 経験値テーブル
-		int captureDifficultyVal;						// 捕獲率
-		int firstFriendnessVal;							// 初期仲良し度
-		MasterDataDefine.masEnum_eggGroup mainEggGroup;	// タマゴグループ１
-		MasterDataDefine.masEnum_eggGroup subEggGroup;	// タマゴグループ２
+		public float height;									// 重さ
+		public float weight;									// 高さ
+		public int tamaDexId;									// タマモン図鑑ID
+		public int voiceId;									// 声ID
+		public int maleRatio;									// オスになる確率
+		public int femaleRatio;								// メスになる確率		MEMO:性別なしは設けず、maleもfemaleも０なら性別なしとする
+		public MasterDataDefine.masEnum_expTable expTable;		// 経験値テーブル
+		public int captureDifficultyVal;						// 捕獲率
+		public int firstFriendnessVal;							// 初期仲良し度
+		public MasterDataDefine.masEnum_eggGroup mainEggGroup;	// タマゴグループ１
+		public MasterDataDefine.masEnum_eggGroup subEggGroup;	// タマゴグループ２
 
-		MasterDataDefine.masEnum_tamamonType mainType;	// タイプ１
-		MasterDataDefine.masEnum_tamamonType subType;	// タイプ２
-		int mainAbilityId;								// 特性１
-		int subAbilityId;								// 特性２
-		int hiddenAbilityId;							// かくれ特性
+		public MasterDataDefine.masEnum_tamamonType mainType;	// タイプ１
+		public MasterDataDefine.masEnum_tamamonType subType;	// タイプ２
+		public int mainAbilityId;								// 特性１
+		public int subAbilityId;								// 特性２
+		public int hiddenAbilityId;							// かくれ特性
 
-		int hp;											// HP
-		int attack;										// 攻撃
-		int defense;									// 防御
-		int specialAttack;								// 特攻
-		int specialDefense;								// 特防
-		int speed;										// 素早さ
+		public int hp;											// HP
+		public int attack;										// 攻撃
+		public int defense;									// 防御
+		public int specialAttack;								// 特攻
+		public int specialDefense;								// 特防
+		public int speed;										// 素早さ
 
-		int levelSkillTableId;							// レベル技テーブルID
-		int machineSkillTableId;						// マシン技テーブルID
-		int eggSkillTableId;							// タマゴ技テーブルID
+		public int levelSkillTableId;							// レベル技テーブルID
+		public int machineSkillTableId;						// マシン技テーブルID
+		public int eggSkillTableId;							// タマゴ技テーブルID
 	}
-	public masStruct_monstersInfo[] m_Items;
+	public MonstersInfo[] m_Items;
 }

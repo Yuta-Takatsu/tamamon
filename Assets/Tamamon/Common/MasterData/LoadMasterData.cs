@@ -51,12 +51,17 @@ public class LoadMasterData : Editor
         if (rows != null)
         {
             MasterData_TamamonMaster md = AssetDatabase.LoadAssetAtPath<MasterData_TamamonMaster>(assetfile);
+
+            AssetDatabase.StartAssetEditing();
+
             if (md == null)
             {
-                md = new MasterData_TamamonMaster();
+                md = CreateInstance<MasterData_TamamonMaster>();
                 AssetDatabase.CreateAsset(md, assetfile);
             }
-            md.m_Items = CSVSerializer.Deserialize<MasterData_TamamonMaster.masStruct_monstersInfo>(rows);
+            md.m_Items = CSVSerializer.Deserialize<MasterData_TamamonMaster.MonstersInfo>(rows);
+
+            AssetDatabase.StopAssetEditing();
 
             EditorUtility.SetDirty(md);
             AssetDatabase.SaveAssets();
