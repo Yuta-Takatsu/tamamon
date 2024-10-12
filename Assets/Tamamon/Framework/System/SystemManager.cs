@@ -38,6 +38,9 @@ namespace Framework
             }
 
             IsInitialized = true;
+
+            // NOTE: EditorBuildSettingsがあるとビルドが通らないので、代替案が出るまで封印
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Title", LoadSceneMode.Single);
         }
     }
 }

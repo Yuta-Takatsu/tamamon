@@ -22,7 +22,8 @@ namespace Framework
         /// </summary>
         public void CreateChangeSceneButton()
         {
-            foreach(var scene in EditorBuildSettings.scenes)
+            // NOTE: EditorBuildSettingsがあるとビルドが通らないので、代替案が出るまで封印
+            /*foreach(var scene in EditorBuildSettings.scenes)
             {
                 // パス名からシーン名を取得
                 string scenePath = scene.path;
@@ -41,7 +42,7 @@ namespace Framework
                 button.onClick.AddListener(async () => await SceneManager.Instance.LoadSceneAsync($"{sceneName}"));
             }
 
-            m_button.gameObject.SetActive(false);
+            m_button.gameObject.SetActive(false);*/
         }
     }
 }
