@@ -1,6 +1,7 @@
 using UnityEngine;
-using Tamamon.Framework;
 using UniRx;
+
+using Framework;
 
 namespace Tamamon.OutGame.Title
 {
@@ -20,6 +21,26 @@ namespace Tamamon.OutGame.Title
         void Start()
         {
             OnInitialize();
+
+            /*
+            SaveData saveData = new SaveData()
+            {
+                PlayerName = "ytakatsu",
+                Party = new System.Collections.Generic.List<int>
+                { 1, 2,3 },
+            };
+
+            DataBank.Instance.UpdateData("PlayerName", saveData);
+
+            DataBank.Instance.SaveAll();
+            */
+            SaveData loadData = new SaveData();
+
+            DataBank.Instance.Load<SaveData>("PlayerName");
+            Debug.Log("Load");
+
+            loadData = DataBank.Instance.Get<SaveData>("PlayerName");
+            Debug.Log(loadData);
         }
 
         public void OnInitialize()
@@ -39,9 +60,6 @@ namespace Tamamon.OutGame.Title
             });
 
             m_titleModel.Observable.Skip(1).Subscribe(state => m_titleModel.OnExecute());
-
-            // BGM再生
-            SoundManager.Instance.PlayBGM(SoundManager.BGM_Type.Title);
 
             // ステート切り替え
             m_titleModel.SetTitleState(m_openingState);

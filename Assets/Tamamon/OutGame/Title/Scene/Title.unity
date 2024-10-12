@@ -974,6 +974,7 @@ MonoBehaviour:
   m_tapTextObj: {fileID: 632313935}
   m_tamamonImage: {fileID: 1779542303}
   m_tamamonSpriteAtlas: {fileID: 100100200, guid: ba188cb09a9d37c4eb76e16fc091a138, type: 3}
+  TitleBGM: {fileID: 8300000, guid: 2fb998b141f0d7a41bbcc37a63a0a366, type: 3}
 --- !u!4 &1310052535
 Transform:
   m_ObjectHideFlags: 0
