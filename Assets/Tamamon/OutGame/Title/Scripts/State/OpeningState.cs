@@ -26,8 +26,8 @@ namespace Tamamon.OutGame.Title
             EventHandler handler = null;
             handler = (object sender, EventArgs e) =>
             {
+                InputEventManager.Instance.RemoveKeyDownEvent(InputManager.Key.Decision, handler);
                 m_openingView.NextState();
-                InputEventManager.Instance.SetKeyDownEvent(InputManager.Key.Decision, handler);
             };
             InputEventManager.Instance.SetKeyDownEvent(InputManager.Key.Decision, handler);
         }

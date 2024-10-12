@@ -20,12 +20,10 @@ namespace Framework
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void OnInitialize()
         {
-            string sceneName = "Boot";
+            // todo Addresableが用意できたら変える
+            GameObject manager = (GameObject)Resources.Load("SystemManager");
 
-            if (!UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName).IsValid())
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-            }
+            GameObject instance = Instantiate(manager);
         }
 
         private void Awake()
@@ -38,9 +36,6 @@ namespace Framework
             }
 
             IsInitialized = true;
-
-            // NOTE: EditorBuildSettingsがあるとビルドが通らないので、代替案が出るまで封印
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Title", LoadSceneMode.Single);
         }
     }
 }
