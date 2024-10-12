@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Framework;
@@ -16,23 +17,24 @@ namespace Tamamon.OutGame.Title
 
         public void OnExecute()
         {
-
             // BGMÄ¶
             SoundManager.Instance.PlayBGM(SoundManager.BGM_Type.Title);
 
-            SkipScene().Forget();
             m_openingView.OnExecute();
+
+            // “ü—ÍƒCƒxƒ“ƒg“o˜^
+            EventHandler handler = null;
+            handler = (object sender, EventArgs e) =>
+            {
+                m_openingView.NextState();
+                InputEventManager.Instance.SetKeyDownEvent(InputManager.Key.Decision, handler);
+            };
+            InputEventManager.Instance.SetKeyDownEvent(InputManager.Key.Decision, handler);
         }
 
         public void OnFinalize()
         {
             m_openingView.OnFinalize();
-        }
-
-        public async UniTask SkipScene()
-        {
-            await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-            m_openingView.NextState();
         }
     }
 }
