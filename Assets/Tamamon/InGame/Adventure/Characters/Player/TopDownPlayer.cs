@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Tamamon.Ingame.Adventure;
 using UnityEngine;
 
 /// <summary>
@@ -24,5 +25,23 @@ public class TopDownPlayer : TopDownCharacterBase
         base.OnInitialize();
         m_controller = new TopDownPlayerController();
         m_controller.OnInitialize(this);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("hit!(tag:" + collision.tag + ")");
+        if (collision.tag == "Encounter")
+        {
+            EncountField field = collision.gameObject.GetComponent<EncountField>();
+            if(field)
+            {
+                int encountRate = field.GetEncountRate();
+                bool res = EncountManager.Instance.CheckEncount(encountRate);
+                if(res)
+                {
+                    Debug.Log("encount");
+                }
+            }
+        }
     }
 }
