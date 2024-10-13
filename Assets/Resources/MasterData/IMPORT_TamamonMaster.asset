@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aa4dffb9713e1b4bb814c3cf4fc5107, type: 3}
+  m_Name: IMPORT_TamamonMaster
+  m_EditorClassIdentifier: 
+  m_Items:
+  - id: 7
+    tribeId: 1
+    evoGroupVal: 100
+    name: "\u30EB\u30C9\u30AB\u30EA"
+    height: 30
+    weight: 12
+    tamaDexId: 7
+    voiceId: 7
+    maleRatio: 85
+    femaleRatio: 15
+    expTable: 3
+    captureDifficultyVal: 255
+    firstFriendnessVal: 70
+    mainEggGroup: 4
+    subEggGroup: 13
+    mainType: 3
+    subType: 0
+    mainAbilityId: 67
+    subAbilityId: 292
+    hiddenAbilityId: 0
+    hp: 60
+    attack: 60
+    defense: 55
+    specialAttack: 45
+    specialDefense: 50
+    speed: 45
+    levelSkillTableId: 1
+    machineSkillTableId: 1
+    eggSkillTableId: 1
+  - id: 8
+    tribeId: 1
+    evoGroupVal: 10
+    name: "\u30C1\u30E3\u30D0\u30E9\u30AC\u30CB"
+    height: 130
+    weight: 60
+    tamaDexId: 8
+    voiceId: 8
+    maleRatio: 85
+    femaleRatio: 15
+    expTable: 3
+    captureDifficultyVal: 255
+    firstFriendnessVal: 70
+    mainEggGroup: 4
+    subEggGroup: 13
+    mainType: 3
+    subType: 11
+    mainAbilityId: 67
+    subAbilityId: 292
+    hiddenAbilityId: 0
+    hp: 70
+    attack: 80
+    defense: 75
+    specialAttack: 55
+    specialDefense: 60
+    speed: 70
+    levelSkillTableId: 1
+    machineSkillTableId: 1
+    eggSkillTableId: 1
+  - id: 9
+    tribeId: 1
+    evoGroupVal: 1
+    name: "\u30E4\u30C9\u30B7\u30CF\u30F3\u30B7"
+    height: 150
+    weight: 75
+    tamaDexId: 9
+    voiceId: 9
+    maleRatio: 85
+    femaleRatio: 15
+    expTable: 3
+    captureDifficultyVal: 255
+    firstFriendnessVal: 70
+    mainEggGroup: 4
+    subEggGroup: 13
+    mainType: 3
+    subType: 11
+    mainAbilityId: 67
+    subAbilityId: 292
+    hiddenAbilityId: 0
+    hp: 80
+    attack: 130
+    defense: 115
+    specialAttack: 65
+    specialDefense: 85
+    speed: 55
+    levelSkillTableId: 1
+    machineSkillTableId: 1
+    eggSkillTableId: 1

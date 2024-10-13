@@ -17,7 +17,7 @@ public class CSVImportExampleFromWeb : Editor
     static void Init()
     {
         string url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzdUCZ3VJYDjTY8IJcv7lBXYoi_ek4ZYqslgNSY46FNEaBPiWnHytGT6kg7r0nxa0QTRYs1SaHRdYg/pub?gid=0&single=true&output=csv";
-        string assetfile = "Assets/CSVSerializer/demo/f1ranking2018.asset";
+        string assetfile = "Assets/Plugins/CSVSerializer/demo/f1ranking2018.asset";
 
         StartCorountine(DownloadAndImport(url, assetfile));
     }
@@ -56,15 +56,20 @@ public class CSVImportExampleFromWeb : Editor
         List<string[]> rows = CSVSerializer.ParseCSV(text);
         if (rows != null)
         {
-            RankingData gm = AssetDatabase.LoadAssetAtPath<RankingData>(assetfile);
-            if (gm == null)
-            {
-                gm = new RankingData();
-                AssetDatabase.CreateAsset(gm, assetfile);
-            }
-            gm.m_Items = CSVSerializer.Deserialize<RankingData.Item>(rows);
+            RankingData md = AssetDatabase.LoadAssetAtPath<RankingData>(assetfile);
 
-            EditorUtility.SetDirty(gm);
+            AssetDatabase.StartAssetEditing();
+
+            if (md == null)
+            {
+                md = CreateInstance<RankingData>();
+                AssetDatabase.CreateAsset(md, assetfile);
+            }
+            md.m_Items = CSVSerializer.Deserialize<RankingData.Item>(rows);
+
+            AssetDatabase.StopAssetEditing();
+
+            EditorUtility.SetDirty(md);
             AssetDatabase.SaveAssets();
         }
     }

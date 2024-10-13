@@ -26,6 +26,8 @@ namespace Tamamon.OutGame.Title
 
         [SerializeField]
         private SpriteAtlas m_tamamonSpriteAtlas = default;
+      
+        public AudioClip TitleBGM = default;
 
         public void OnInitialize()
         {

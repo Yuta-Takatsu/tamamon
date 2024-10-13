@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UniRx;
-using Tamamon.Framework;
+using Framework;
 
 /// <summary>
 /// バトルコントローラークラス
@@ -140,8 +140,6 @@ public class BattleController : MonoBehaviour
     /// <returns></returns>
     public async UniTask OnEncount()
     {
-
-        await SceneManager.Instance.FadeOut();
 
         await m_battleTamamonView.PlayEncountEnemyAnimation();
 
