@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor;
 
 namespace Framework
 {
@@ -22,27 +19,19 @@ namespace Framework
         /// </summary>
         public void CreateChangeSceneButton()
         {
-            // NOTE: EditorBuildSettingsがあるとビルドが通らないので、代替案が出るまで封印
-            /*foreach(var scene in EditorBuildSettings.scenes)
-            {
-                // パス名からシーン名を取得
-                string scenePath = scene.path;
-                string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+            // コールバック登録
+            Button titleButton = Instantiate(m_button, m_button.transform.parent);
+            titleButton.GetComponentInChildren<TextMeshProUGUI>().text = "Title";
+            Button adventureButton = Instantiate(m_button, m_button.transform.parent);
+            adventureButton.GetComponentInChildren<TextMeshProUGUI>().text = "Adventure";
+            Button battleButton = Instantiate(m_button, m_button.transform.parent);
+            battleButton.GetComponentInChildren<TextMeshProUGUI>().text = "Battle";
 
-                // Bootシーンなら飛ばす
-                if(sceneName == "Boot")
-                {
-                    continue;
-                }
+            titleButton.onClick.AddListener(async () => await SceneManager.Instance.LoadSceneAsync("Title"));
+            adventureButton.onClick.AddListener(async () => await SceneManager.Instance.LoadSceneAsync("Cty001"));
+            battleButton.onClick.AddListener(async () => await SceneManager.Instance.LoadSceneAsync("Battle"));
 
-                // コールバック登録
-                Button button = Instantiate(m_button, m_button.transform.parent);
-                button.GetComponentInChildren<TextMeshProUGUI>().text = sceneName;
-
-                button.onClick.AddListener(async () => await SceneManager.Instance.LoadSceneAsync($"{sceneName}"));
-            }
-
-            m_button.gameObject.SetActive(false);*/
+            m_button.gameObject.SetActive(false);
         }
     }
 }

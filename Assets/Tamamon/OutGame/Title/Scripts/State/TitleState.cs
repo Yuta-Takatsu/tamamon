@@ -27,8 +27,8 @@ namespace Tamamon.OutGame.Title
             EventHandler handler = null;
             handler = async (object sender, EventArgs e) =>
             {
-                await BattleManager.Instance.LoadBattleScene(3);
-                InputEventManager.Instance.SetKeyDownEvent(InputManager.Key.Decision, handler);
+                InputEventManager.Instance.RemoveKeyDownEvent(InputManager.Key.Decision, handler);
+                await BattleManager.Instance.LoadBattleScene(3);                
             };
             InputEventManager.Instance.SetKeyDownEvent(InputManager.Key.Decision, handler);
         }
