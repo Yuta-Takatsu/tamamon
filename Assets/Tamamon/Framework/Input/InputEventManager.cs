@@ -20,6 +20,8 @@ namespace Framework
 
         public override void Awake()
         {
+            base.Awake();
+
             IsInput = true;
 
             //キーの種類の数だけイベントを生成する

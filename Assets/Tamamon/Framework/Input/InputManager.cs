@@ -29,6 +29,7 @@ namespace Framework
 
         public override void Awake()
         {
+            base.Awake();
             m_keyConfig = new KeyConfig();
 
             // デフォルト設定を読み込み
