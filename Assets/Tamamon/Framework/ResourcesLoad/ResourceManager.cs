@@ -22,6 +22,8 @@ namespace Framework
         }
 
         // Update is called once per frame
+
+        /*
         public async UniTask RequestLoad(CancellationToken m_cansellationToken)
         {
              await Addressables.LoadAssetAsync<Sprite>("Assets/AddressableAssets/Tamamon/9.png").Completed += handle => {
@@ -36,5 +38,6 @@ namespace Framework
         private void OnDestroy() {
             if (m_SpriteHandle.IsValid()) Addressables.Release(m_SpriteHandle);
         }
+        */
     }
 }
