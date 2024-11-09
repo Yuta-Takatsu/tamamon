@@ -1,11 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Cysharp.Threading.Tasks;
 
 namespace Tamamon.InGame.AdventureEvent
 {
+    /// <summary>
+    /// アドベンチャーパートのviewクラス
+    /// </summary>
     public class AdventureEventView : MonoBehaviour
     {
         [SerializeField]

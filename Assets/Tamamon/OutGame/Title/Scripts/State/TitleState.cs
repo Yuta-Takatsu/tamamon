@@ -1,7 +1,6 @@
 using System;
-using UnityEngine;
-using Cysharp.Threading.Tasks;
 using Framework;
+using Tamamon.InGame.AdventureEvent;
 
 namespace Tamamon.OutGame.Title
 {
@@ -28,7 +27,7 @@ namespace Tamamon.OutGame.Title
             handler = async (object sender, EventArgs e) =>
             {
                 InputEventManager.Instance.RemoveKeyDownEvent(InputManager.Key.Decision, handler);
-                await BattleManager.Instance.LoadBattleScene(3);                
+                await BattleManager.Instance.LoadScene(3);
             };
             InputEventManager.Instance.SetKeyDownEvent(InputManager.Key.Decision, handler);
         }

@@ -27,7 +27,7 @@ namespace Framework
         }
 
         /// <summary>
-        /// 指定したキーが入力されたか(単押し)
+        /// 指定したキーが入力されたか(長押し)
         /// </summary>
         /// <param name="inputType"></param>
         /// <returns></returns>
@@ -37,7 +37,7 @@ namespace Framework
         }
 
         /// <summary>
-        /// 指定したキーが入力されたか(長押し)
+        /// 指定したキーが入力されたか(単押し)
         /// </summary>
         /// <param name="inputType"></param>
         /// <returns></returns>

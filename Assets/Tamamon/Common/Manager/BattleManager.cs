@@ -7,9 +7,9 @@ using Framework;
 public class BattleManager : MonoBehaviourSingleton<BattleManager>
 {
     
-    public async UniTask LoadBattleScene(int enemyId)
+    public async UniTask LoadScene(int enemyId, UnityEngine.SceneManagement.LoadSceneMode mode = UnityEngine.SceneManagement.LoadSceneMode.Additive)
     {
-        await SceneManager.Instance.LoadSceneAsync("Battle", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        await SceneManager.Instance.LoadSceneAsync("Battle", mode);
 
         // BattleScene‚ÌBattleController‚ðŽæ“¾
         BattleController controller = SceneManager.Instance.GetSceneObjectByName("Battle", "BattleController").GetComponent<BattleController>();
@@ -17,7 +17,7 @@ public class BattleManager : MonoBehaviourSingleton<BattleManager>
         controller.OnInitialize(enemyId);
     }
 
-    public async UniTask UnLoadBattleScene()
+    public async UniTask UnLoadScene()
     {
         await SceneManager.Instance.UnLoadSceneAsync("Battle");
     }

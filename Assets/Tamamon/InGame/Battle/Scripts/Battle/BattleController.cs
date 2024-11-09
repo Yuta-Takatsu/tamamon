@@ -502,7 +502,7 @@ public class BattleController : MonoBehaviour
         }
 
         // バトルシーン破棄
-        await BattleManager.Instance.UnLoadBattleScene();
+        await BattleManager.Instance.UnLoadScene();
 
         await SoundManager.Instance.StopBGMAsync();
     }
