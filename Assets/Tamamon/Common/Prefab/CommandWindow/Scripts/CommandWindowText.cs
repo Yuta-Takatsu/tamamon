@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using TMPro;
 using DG.Tweening;
+using Framework;
 
-public class CommandWindowText : MonoBehaviour
+public class CommandWindowText : MonoBehaviour, IPool<CommandWindowText>
 {
     [SerializeField]
     private TextMeshProUGUI m_commandText = default;
@@ -13,6 +13,20 @@ public class CommandWindowText : MonoBehaviour
     private CanvasGroup m_commandArrowcanvasGroup = new CanvasGroup();
 
     private Tween m_flashTween = default;
+
+    private IObjectPool<CommandWindowText> m_objectPool;
+    public IObjectPool<CommandWindowText> ObjectPool { set => m_objectPool = value; }
+
+    public void OnInitialize()
+    {
+
+    }
+
+    public void OnFinalize()
+    {
+
+    }
+
 
     /// <summary>
     /// èâä˙âª

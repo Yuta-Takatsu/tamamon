@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Cysharp.Threading.Tasks;
@@ -13,9 +14,14 @@ namespace Tamamon.InGame.AdventureEvent
         private GameObject m_textWindow = default;
         [SerializeField]
         private TextMeshProUGUI m_messageText = default;
+        [SerializeField]
+        private CommandWindowBase m_selectCommandWindow = default;
 
         private TypeWriteEffect m_typeWriteEffect = default;
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
         public void OnInitialize()
         {
             m_typeWriteEffect = new TypeWriteEffect();
@@ -31,7 +37,10 @@ namespace Tamamon.InGame.AdventureEvent
             m_messageText.text = string.Empty;
         }
 
-
+        /// <summary>
+        /// テキストウィンドウ表示切替
+        /// </summary>
+        /// <param name="isActive"></param>
         public void SetWindow(bool isActive)
         {
             m_textWindow.SetActive(isActive);
@@ -54,6 +63,11 @@ namespace Tamamon.InGame.AdventureEvent
         public bool IsMessageAnimation()
         {
             return m_typeWriteEffect.IsAnimation;
+        }
+
+        public void ShowSelectCommandWindow(List<string> comanndTextList)
+        {
+            m_selectCommandWindow.OnInitialize(comanndTextList);
         }
     }
 }

@@ -70,7 +70,6 @@ namespace Tamamon.InGame.AdventureEvent
 
             while (m_adventureEventModel.CurrentIndex < m_adventureEventModel.MaxEventCommandCount)
             {
-                Debug.Log(m_adventureEventModel.CurrentIndex);
                 m_adventureEventModel.SetCurrentEventCommand(eventList[m_adventureEventModel.CurrentIndex]);
                 m_adventureEventModel.SetCurrentEventString(eventList[m_adventureEventModel.CurrentIndex]);
 
