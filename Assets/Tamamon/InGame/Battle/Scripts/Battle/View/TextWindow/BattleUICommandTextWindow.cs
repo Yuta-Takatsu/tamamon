@@ -50,7 +50,7 @@ public class BattleUICommandTextWindow : CommandWindowBase
                 else if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
                     if (m_selectIndex == 1 || m_selectIndex == 3) break;
-                    if (m_selectIndex + 1 >= m_commandWindowTextList.Count) break;
+                    //if (m_selectIndex + 1 >= m_commandWindowTextList.Count) break;
 
                     m_prevSelectIndex = m_selectIndex;
                     m_selectIndex++;
@@ -69,7 +69,7 @@ public class BattleUICommandTextWindow : CommandWindowBase
                 else if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
                     if (m_selectIndex == 2 || m_selectIndex == 3) break;
-                    if (m_selectIndex + 2 >= m_commandWindowTextList.Count) break;
+                    //if (m_selectIndex + 2 >= m_commandWindowTextList.Count) break;
 
                     m_prevSelectIndex = m_selectIndex;
                     m_selectIndex += 2;

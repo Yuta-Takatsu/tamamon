@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Cysharp.Threading.Tasks;
+using Tamamon.UI;
 
 namespace Tamamon.InGame.AdventureEvent
 {
@@ -15,7 +16,7 @@ namespace Tamamon.InGame.AdventureEvent
         [SerializeField]
         private TextMeshProUGUI m_messageText = default;
         [SerializeField]
-        private CommandWindowBase m_selectCommandWindow = default;
+        private UI.CommandWindowBase m_selectCommandWindow = default;
 
         private TypeWriteEffect m_typeWriteEffect = default;
 
@@ -25,6 +26,10 @@ namespace Tamamon.InGame.AdventureEvent
         public void OnInitialize()
         {
             m_typeWriteEffect = new TypeWriteEffect();
+
+            // UI非表示
+            m_textWindow.SetActive(false);
+            m_selectCommandWindow.gameObject.SetActive(false);
 
             ClearText();
         }
@@ -65,9 +70,34 @@ namespace Tamamon.InGame.AdventureEvent
             return m_typeWriteEffect.IsAnimation;
         }
 
-        public void ShowSelectCommandWindow(List<string> comanndTextList)
+        /// <summary>
+        /// コマンドウィンドウ表示処理
+        /// </summary>
+        /// <param name="comanndTextList"></param>
+        /// <returns></returns>
+        public async UniTask OnOpenSelectCommandWindow(List<string> comanndTextList)
         {
             m_selectCommandWindow.OnInitialize(comanndTextList);
+            await m_selectCommandWindow.Show();
+        }
+
+        /// <summary>
+        /// コマンドウィンドウ非表示処理
+        /// </summary>
+        public int OnCloseSelectCommandWindow()
+        {
+            m_selectCommandWindow.OnFinarize();
+            Debug.Log(m_selectCommandWindow.SelectIndex);
+            return m_selectCommandWindow.SelectIndex;
+        }
+
+        /// <summary>
+        /// コマンドウィンドウが表示中かどうか
+        /// </summary>
+        /// <returns></returns>
+        public bool IsShow()
+        {
+            return m_selectCommandWindow.IsShow;
         }
     }
 }

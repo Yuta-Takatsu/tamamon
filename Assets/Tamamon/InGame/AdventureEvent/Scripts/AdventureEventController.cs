@@ -76,6 +76,7 @@ namespace Tamamon.InGame.AdventureEvent
                 if (m_adventureEventModel.IsExecute())
                 {
                     m_commandIndex = await m_onAdventureEvents[m_adventureEventModel.CurrentCommand].OnExecute(m_adventureEventModel.CurrentText);
+                    Debug.Log(m_adventureEventModel.CurrentCommand);
                 }
                 m_adventureEventModel.OnCommandEvent();
             }

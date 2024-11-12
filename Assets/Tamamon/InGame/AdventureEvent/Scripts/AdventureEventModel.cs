@@ -120,10 +120,10 @@ namespace Tamamon.InGame.AdventureEvent
                 {"" },
                 {"" },{"‚ ‚¢‚¤‚¦‚¨"},{"‚©‚«‚­‚¯‚±"},
                 {"" },{"‚³‚µ‚·‚¹‚»"},{""},
-                {"" },{"‚ ‚¢‚¤‚¦‚¨"},{"‚©‚«‚­‚¯‚±"},
+                {"" },{"‚½‚¿‚Â‚Ä‚Æ"},{"‚È‚É‚Ê‚Ë‚Ì"},
                 {""},
-                {"" },{"‚³‚µ‚·‚¹‚»"},{"‚½‚¿‚Â‚Ä‚Æ"},
-                {"" },{"‚È‚É‚Ê‚Ë‚Ì"},{"‚Í‚Ð‚Ó‚Ö‚Ù"},
+                {"" },{"‚Í‚Ð‚Ó‚Ö‚Ù"},{"‚Ü‚Ý‚Þ‚ß‚à"},
+                {"" },{"‚â‚ä‚æ"},{"‚ç‚è‚é‚ê‚ë"},
                 {""},
                 {"‚¨‚í‚è" },
             };
@@ -165,10 +165,15 @@ namespace Tamamon.InGame.AdventureEvent
         /// <returns></returns>
         public bool IsExecute()
         {
-            if(CurrentCommand == CommandTexts[CommandEnum.SelectOr] ||
+            if (CurrentCommand == CommandTexts[CommandEnum.SelectOr] ||
                 CurrentCommand == CommandTexts[CommandEnum.SelectEnd])
             {
                 m_isExecute = true;
+            }
+
+            if (CurrentCommand == CommandTexts[CommandEnum.SelectStart] && !m_isExecute)
+            {
+                AddSelectEvent(-1);
             }
 
             return m_isExecute;

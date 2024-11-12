@@ -10,7 +10,7 @@ namespace Framework
     public abstract class PoolManager<T> : MonoBehaviour where T : MonoBehaviour, IPool<T>
     {
         [SerializeField]
-        private T m_poolObject = default;
+        protected T m_poolObject = default;
 
         protected IObjectPool<T> m_objectPool = default;
 
@@ -35,6 +35,8 @@ namespace Framework
                 m_isCollection,
                 m_defaultCapacity,
                 m_maxSize);
+
+            m_poolObject.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -45,6 +47,7 @@ namespace Framework
         {
             T instance = Instantiate(m_poolObject, m_poolObject.transform.parent);
             instance.ObjectPool = m_objectPool;
+            instance.gameObject.SetActive(true);
             return instance;
         }
 

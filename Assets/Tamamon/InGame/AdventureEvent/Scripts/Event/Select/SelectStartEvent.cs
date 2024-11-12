@@ -23,15 +23,29 @@ namespace Tamamon.InGame.AdventureEvent
 
         public async UniTask<int> OnExecute(string str)
         {
-            m_adventureEventModel.AddSelectEvent(0);
-            return 0;
+            List<string> commandList = new List<string>();
+            
 
-            // “ü—Í‘Ò‚¿
-            await UniTask.WaitUntil(() => InputManager.Instance.GetKeyDown(InputManager.Key.Decision));
-            
-            m_index = 0;
-            
-            return m_index;
+            commandList.Add("‘I‘ðŽˆ1");
+            commandList.Add("‘I‘ðŽˆ2");
+            if (m_index < 0)
+            {
+                commandList.Add("‘I‘ðŽˆ3");
+                m_index = 1;
+            }
+            else if (m_index > 0)
+            {
+                m_index = -1;
+            }
+
+            await m_adventureEventView.OnOpenSelectCommandWindow(commandList);
+
+            await UniTask.WaitWhile(() => m_adventureEventView.IsShow());
+
+            int index = m_adventureEventView.OnCloseSelectCommandWindow();
+
+            m_adventureEventModel.AddSelectEvent(index);
+            return index;
         }
     }
 }
